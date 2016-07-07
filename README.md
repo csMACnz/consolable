@@ -24,5 +24,5 @@ The goals of this library are to:
   * Build an adapter for docopt usage.txt files
   * Build a fluent adapter similar to some cli frameworks
   * Build an attributes-driven adapter similar to some cli frameworks
-* Meet as much of the [sytax standards](https://en.wikipedia.org/wiki/Command-line_interface) as possible out of the box, at the same time
+* Meet as much of the [syntax standards](https://en.wikipedia.org/wiki/Command-line_interface) as possible out of the box, at the same time
 * Support app modes is a convenient way, with seperate argument configurations.
