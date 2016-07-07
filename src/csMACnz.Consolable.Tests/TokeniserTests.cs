@@ -66,6 +66,10 @@ namespace csMACnz.Consolable.Tests
         [InlineDataAttribute("/a:value", "a", "value")]
         [InlineDataAttribute("--abort=value", "abort", "value")]
         [InlineDataAttribute("--abort:value", "abort", "value")]
+        [InlineDataAttribute("--abort:key=value", "abort", "key=value")]
+        [InlineDataAttribute("--abort=key:value", "abort", "key:value")]
+        [InlineDataAttribute("--abort=key=value", "abort", "key=value")]
+        [InlineDataAttribute("--abort:key:value", "abort", "key:value")]
         public void Tokeniser_SimpleSingleArgInput_TwoResults(string rawArg, string parsedArg, string parsedValue) 
         {
             var input = new string[]{rawArg};
