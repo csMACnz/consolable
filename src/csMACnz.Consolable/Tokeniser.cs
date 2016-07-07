@@ -53,6 +53,7 @@ namespace csMACnz.Consolable
                 }
 
                 string argString;
+                int rawIndex = index;
                 if(hasSplitPoint)
                 {
                     argString = arg.Substring(index, splitIndex-index);
@@ -66,32 +67,37 @@ namespace csMACnz.Consolable
 
                 if(isMultiArg)
                 {
-                    foreach(char c in argString)
+                    foreach(int i in Enumerable.Range(0, argString.Length))
                     {
-                        yield return new Token(TokenType.Arg, c.ToString());
+                        char c = argString[i];
+                        yield return new Token(TokenType.Arg, c.ToString(), arg, rawIndex+i);
                     }
                 }
                 else
                 {
-                    yield return new Token(TokenType.Arg, argString);
+                    yield return new Token(TokenType.Arg, argString, arg, rawIndex);
                 }
             }
 
             if(remainderIsValue)
             {
-                yield return new Token(TokenType.Value, arg.Substring(index));
+                yield return new Token(TokenType.Value, arg.Substring(index), arg, index);
             }
         }
     }
 
     public class Token{
-        public Token(TokenType type, string value)
+        public Token(TokenType type, string value, string raw, int rawIndex)
         {
             TokenType = type;
             Value = value;
+            Raw = raw;
+            RawIndex = rawIndex;
         }
         public TokenType TokenType { get; }
         public string Value { get; }
+        public string Raw { get; }
+        public int RawIndex { get; }
      }
 
     public enum TokenType

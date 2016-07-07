@@ -39,15 +39,17 @@ namespace csMACnz.Consolable.Tests
                     Assert.NotNull(t);
                     Assert.Equal(TokenType.Value, t.TokenType);
                     Assert.Equal(value, t.Value);
+                    Assert.Equal(value, t.Raw);
+                    Assert.Equal(0, t.RawIndex);
                 });
         }
         
         [Theory]
-        [InlineDataAttribute("--", "-")]
-        [InlineDataAttribute("-a", "a")]
-        [InlineDataAttribute("/a", "a")]
-        [InlineDataAttribute("--abort", "abort")]
-        public void Tokeniser_SimpleSingleArgInput_OneResult(string rawArg, string parsedArg) 
+        [InlineDataAttribute("--", 1, "-")]
+        [InlineDataAttribute("-a", 1, "a")]
+        [InlineDataAttribute("/a", 1, "a")]
+        [InlineDataAttribute("--abort", 2, "abort")]
+        public void Tokeniser_SimpleSingleArgInput_OneResult(string rawArg, int rawIndex, string parsedArg) 
         {
             var input = new string[]{rawArg};
             var sut = new Tokeniser();
@@ -62,6 +64,8 @@ namespace csMACnz.Consolable.Tests
                     Assert.NotNull(t);
                     Assert.Equal(TokenType.Arg, t.TokenType);
                     Assert.Equal(parsedArg, t.Value);
+                    Assert.Equal(rawArg, t.Raw);
+                    Assert.Equal(rawIndex, t.RawIndex);
                 });
         }
         
