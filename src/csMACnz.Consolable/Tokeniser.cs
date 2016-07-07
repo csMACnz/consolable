@@ -13,11 +13,13 @@ namespace csMACnz.Consolable
         private IEnumerable<Token> Split(string arg)
         {
             bool isArg = false;
+            bool isMultiArg = false;
             int index = 0;
             bool remainderIsValue = true;
             if(arg.StartsWith("--"))
             {
                 isArg=true;
+                isMultiArg = false;
                 if(arg.Length == 2)
                 {
                     index = 1;
@@ -30,6 +32,7 @@ namespace csMACnz.Consolable
             else if(arg.StartsWith("-") || arg.StartsWith("/"))
             {
                 isArg=true;
+                isMultiArg = true;
                 index = 1;
             }
 
@@ -49,15 +52,28 @@ namespace csMACnz.Consolable
                     splitIndex = System.Math.Min(splitIndex, arg.IndexOf(":"));
                 }
 
+                string argString;
                 if(hasSplitPoint)
                 {
-                    yield return new Token(TokenType.Arg, arg.Substring(index, splitIndex-index));
+                    argString = arg.Substring(index, splitIndex-index);
                     index=splitIndex + 1;
                     remainderIsValue = true;
                 }
                 else
                 {
-                    yield return new Token(TokenType.Arg, arg.Substring(index));
+                    argString = arg.Substring(index);
+                }
+
+                if(isMultiArg)
+                {
+                    foreach(char c in argString)
+                    {
+                        yield return new Token(TokenType.Arg, c.ToString());
+                    }
+                }
+                else
+                {
+                    yield return new Token(TokenType.Arg, argString);
                 }
             }
 

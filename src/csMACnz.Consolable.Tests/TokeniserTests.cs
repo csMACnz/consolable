@@ -61,7 +61,11 @@ namespace csMACnz.Consolable.Tests
         
         [Theory]
         [InlineDataAttribute("-a=value", "a", "value")]
+        [InlineDataAttribute("-a=key=value", "a", "key=value")]
+        [InlineDataAttribute("-a=key:value", "a", "key:value")]
         [InlineDataAttribute("-a:value", "a", "value")]
+        [InlineDataAttribute("-a:key=value", "a", "key=value")]
+        [InlineDataAttribute("-a:key:value", "a", "key:value")]
         [InlineDataAttribute("/a=value", "a", "value")]
         [InlineDataAttribute("/a:value", "a", "value")]
         [InlineDataAttribute("--abort=value", "abort", "value")]
@@ -85,6 +89,39 @@ namespace csMACnz.Consolable.Tests
                     Assert.NotNull(t);
                     Assert.Equal(TokenType.Arg, t.TokenType);
                     Assert.Equal(parsedArg, t.Value);
+                },
+                t=> 
+                {
+                    Assert.NotNull(t);
+                    Assert.Equal(TokenType.Value, t.TokenType);
+                    Assert.Equal(parsedValue, t.Value);
+                });
+        }
+
+
+        [Theory]
+        [InlineDataAttribute("-ab=value", "a", "b", "value")]
+        public void Tokeniser_SimpleSingleArgInput_TwoResults(string rawArg, string parsedArg1, string parsedArg2, string parsedValue) 
+        {
+            var input = new string[]{rawArg};
+            var sut = new Tokeniser();
+
+            var result = sut.GetTokens(input).ToList();
+
+            Assert.NotNull(result);
+            Assert.Collection(
+                result,
+                t=> 
+                {
+                    Assert.NotNull(t);
+                    Assert.Equal(TokenType.Arg, t.TokenType);
+                    Assert.Equal(parsedArg1, t.Value);
+                },
+                t=> 
+                {
+                    Assert.NotNull(t);
+                    Assert.Equal(TokenType.Arg, t.TokenType);
+                    Assert.Equal(parsedArg2, t.Value);
                 },
                 t=> 
                 {
