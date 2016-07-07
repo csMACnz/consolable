@@ -36,10 +36,14 @@ namespace csMACnz.Consolable.Tests
                 });
         }
         
-        [Fact]
-        public void Tokeniser_SimpleSingleArgInput_OneResult() 
+        [Theory]
+        [InlineDataAttribute("--", "-")]
+        [InlineDataAttribute("-a", "a")]
+        [InlineDataAttribute("/a", "a")]
+        [InlineDataAttribute("--abort", "abort")]
+        public void Tokeniser_SimpleSingleArgInput_OneResult(string rawArg, string parsedArg) 
         {
-            var input = new string[]{"-a"};
+            var input = new string[]{rawArg};
             var sut = new Tokeniser();
 
             var result = sut.GetTokens(input).ToList();
@@ -51,7 +55,38 @@ namespace csMACnz.Consolable.Tests
                 {
                     Assert.NotNull(t);
                     Assert.Equal(TokenType.Arg, t.TokenType);
-                    Assert.Equal("a", t.Value);
+                    Assert.Equal(parsedArg, t.Value);
+                });
+        }
+        
+        [Theory]
+        [InlineDataAttribute("-a=value", "a", "value")]
+        [InlineDataAttribute("-a:value", "a", "value")]
+        [InlineDataAttribute("/a=value", "a", "value")]
+        [InlineDataAttribute("/a:value", "a", "value")]
+        [InlineDataAttribute("--abort=value", "abort", "value")]
+        [InlineDataAttribute("--abort:value", "abort", "value")]
+        public void Tokeniser_SimpleSingleArgInput_TwoResults(string rawArg, string parsedArg, string parsedValue) 
+        {
+            var input = new string[]{rawArg};
+            var sut = new Tokeniser();
+
+            var result = sut.GetTokens(input).ToList();
+
+            Assert.NotNull(result);
+            Assert.Collection(
+                result,
+                t=> 
+                {
+                    Assert.NotNull(t);
+                    Assert.Equal(TokenType.Arg, t.TokenType);
+                    Assert.Equal(parsedArg, t.Value);
+                },
+                t=> 
+                {
+                    Assert.NotNull(t);
+                    Assert.Equal(TokenType.Value, t.TokenType);
+                    Assert.Equal(parsedValue, t.Value);
                 });
         }
     }

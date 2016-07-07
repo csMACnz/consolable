@@ -12,11 +12,58 @@ namespace csMACnz.Consolable
 
         private IEnumerable<Token> Split(string arg)
         {
-            if(arg.StartsWith("-")){
-                yield return new Token(TokenType.Arg, arg.Substring(1));
+            bool isArg = false;
+            int index = 0;
+            bool remainderIsValue = true;
+            if(arg.StartsWith("--"))
+            {
+                isArg=true;
+                if(arg.Length == 2)
+                {
+                    index = 1;
+                }
+                else
+                {
+                    index = 2;
+                }
             }
-            else{
-                yield return new Token(TokenType.Value, arg);
+            else if(arg.StartsWith("-") || arg.StartsWith("/"))
+            {
+                isArg=true;
+                index = 1;
+            }
+
+            if(isArg){
+                remainderIsValue = false;
+                bool hasSplitPoint = false;
+                int splitIndex = int.MaxValue;
+                
+                if(arg.Contains("="))
+                {
+                    hasSplitPoint = true;
+                    splitIndex = System.Math.Min(splitIndex, arg.IndexOf("="));
+                }
+                if(arg.Contains(":"))
+                {
+                    hasSplitPoint = true;
+                    splitIndex = System.Math.Min(splitIndex, arg.IndexOf(":"));
+                }
+
+                if(hasSplitPoint)
+                {
+                    yield return new Token(TokenType.Arg, arg.Substring(index, splitIndex-index));
+                    index=splitIndex + 1;
+                    remainderIsValue = true;
+                }
+                else
+                {
+                    yield return new Token(TokenType.Arg, arg.Substring(index));
+                }
+            }
+
+            if(remainderIsValue)
+            {
+                yield return new Token(TokenType.Value, arg.Substring(index));
             }
         }
     }
