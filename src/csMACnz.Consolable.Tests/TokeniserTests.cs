@@ -17,10 +17,16 @@ namespace csMACnz.Consolable.Tests
             Assert.Empty(result);
         }
 
-        [Fact]
-        public void Tokeniser_SimpleSingleValueInput_OneResult() 
+        [Theory]
+        [InlineData("")]
+        [InlineData(" ")]
+        [InlineData("simple")]
+        [InlineData("key:value")]
+        [InlineData("key=value")]
+        [InlineData("key value")]
+        public void Tokeniser_SimpleSingleValueInput_OneResult(string value) 
         {
-            var input = new string[]{"simple"};
+            var input = new string[]{value};
             var sut = new Tokeniser();
 
             var result = sut.GetTokens(input).ToList();
@@ -32,7 +38,7 @@ namespace csMACnz.Consolable.Tests
                 {
                     Assert.NotNull(t);
                     Assert.Equal(TokenType.Value, t.TokenType);
-                    Assert.Equal("simple", t.Value);
+                    Assert.Equal(value, t.Value);
                 });
         }
         
