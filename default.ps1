@@ -5,6 +5,13 @@ properties {
 # Probably will just build, decide later
 task default
 
+task restore {
+    cd src/csMACnz.Consolable
+    dotnet restore
+    cd ../csMACnz.Consolable.Tests
+    dotnet restore
+}
+
 task build {
     cd src/csMACnz.Consolable
     dotnet build

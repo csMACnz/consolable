@@ -70,21 +70,21 @@ namespace csMACnz.Consolable.Tests
         }
         
         [Theory]
-        [InlineDataAttribute("-a=value", "a", "value")]
-        [InlineDataAttribute("-a=key=value", "a", "key=value")]
-        [InlineDataAttribute("-a=key:value", "a", "key:value")]
-        [InlineDataAttribute("-a:value", "a", "value")]
-        [InlineDataAttribute("-a:key=value", "a", "key=value")]
-        [InlineDataAttribute("-a:key:value", "a", "key:value")]
-        [InlineDataAttribute("/a=value", "a", "value")]
-        [InlineDataAttribute("/a:value", "a", "value")]
-        [InlineDataAttribute("--abort=value", "abort", "value")]
-        [InlineDataAttribute("--abort:value", "abort", "value")]
-        [InlineDataAttribute("--abort:key=value", "abort", "key=value")]
-        [InlineDataAttribute("--abort=key:value", "abort", "key:value")]
-        [InlineDataAttribute("--abort=key=value", "abort", "key=value")]
-        [InlineDataAttribute("--abort:key:value", "abort", "key:value")]
-        public void Tokeniser_SimpleSingleArgInput_TwoResults(string rawArg, string parsedArg, string parsedValue) 
+        [InlineDataAttribute("-a=value", 1, "a", 3, "value")]
+        [InlineDataAttribute("-a=key=value", 1, "a", 3, "key=value")]
+        [InlineDataAttribute("-a=key:value", 1, "a", 3, "key:value")]
+        [InlineDataAttribute("-a:value", 1, "a", 3, "value")]
+        [InlineDataAttribute("-a:key=value", 1, "a", 3, "key=value")]
+        [InlineDataAttribute("-a:key:value", 1, "a", 3, "key:value")]
+        [InlineDataAttribute("/a=value", 1, "a", 3, "value")]
+        [InlineDataAttribute("/a:value", 1, "a", 3, "value")]
+        [InlineDataAttribute("--abort=value", 2, "abort", 8, "value")]
+        [InlineDataAttribute("--abort:value", 2, "abort", 8, "value")]
+        [InlineDataAttribute("--abort:key=value", 2, "abort", 8, "key=value")]
+        [InlineDataAttribute("--abort=key:value", 2, "abort", 8, "key:value")]
+        [InlineDataAttribute("--abort=key=value", 2, "abort", 8, "key=value")]
+        [InlineDataAttribute("--abort:key:value", 2, "abort", 8, "key:value")]
+        public void Tokeniser_SimpleSingleArgInput_TwoResults(string rawArg, int argIndex, string parsedArg, int valueIndex, string parsedValue) 
         {
             var input = new string[]{rawArg};
             var sut = new Tokeniser();
@@ -99,19 +99,23 @@ namespace csMACnz.Consolable.Tests
                     Assert.NotNull(t);
                     Assert.Equal(TokenType.Arg, t.TokenType);
                     Assert.Equal(parsedArg, t.Value);
+                    Assert.Equal(rawArg, t.Raw);
+                    Assert.Equal(argIndex, t.RawIndex);
                 },
                 t=> 
                 {
                     Assert.NotNull(t);
                     Assert.Equal(TokenType.Value, t.TokenType);
                     Assert.Equal(parsedValue, t.Value);
+                    Assert.Equal(rawArg, t.Raw);
+                    Assert.Equal(valueIndex, t.RawIndex);
                 });
         }
 
 
         [Theory]
-        [InlineDataAttribute("-ab=value", "a", "b", "value")]
-        public void Tokeniser_SimpleSingleArgInput_TwoResults(string rawArg, string parsedArg1, string parsedArg2, string parsedValue) 
+        [InlineDataAttribute("-ab=value", 1, "a", 2, "b", 4, "value")]
+        public void Tokeniser_SimpleSingleArgInput_TwoResults(string rawArg, int arg1Index, string parsedArg1, int arg2Index, string parsedArg2, int valueIndex, string parsedValue) 
         {
             var input = new string[]{rawArg};
             var sut = new Tokeniser();
@@ -126,18 +130,24 @@ namespace csMACnz.Consolable.Tests
                     Assert.NotNull(t);
                     Assert.Equal(TokenType.Arg, t.TokenType);
                     Assert.Equal(parsedArg1, t.Value);
+                    Assert.Equal(rawArg, t.Raw);
+                    Assert.Equal(arg1Index, t.RawIndex);
                 },
                 t=> 
                 {
                     Assert.NotNull(t);
                     Assert.Equal(TokenType.Arg, t.TokenType);
                     Assert.Equal(parsedArg2, t.Value);
+                    Assert.Equal(rawArg, t.Raw);
+                    Assert.Equal(arg2Index, t.RawIndex);
                 },
                 t=> 
                 {
                     Assert.NotNull(t);
                     Assert.Equal(TokenType.Value, t.TokenType);
                     Assert.Equal(parsedValue, t.Value);
+                    Assert.Equal(rawArg, t.Raw);
+                    Assert.Equal(valueIndex, t.RawIndex);
                 });
         }
     }
