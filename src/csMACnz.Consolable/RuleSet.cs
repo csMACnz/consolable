@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace csMACnz.Consolable
 {
@@ -7,7 +8,7 @@ namespace csMACnz.Consolable
     {
         public static IEnumerable<Argument> GetValidArguments(IEnumerable<IRule> input)
         {
-            throw new NotImplementedException();
+            return Enumerable.Empty<Argument>();
         }
     }
 
