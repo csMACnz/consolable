@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using System.Linq;
 using Xunit;
 
@@ -5,7 +7,6 @@ namespace csMACnz.Consolable.Tests
 {
     public class RuleSetTests
     {
-    
         [Fact]
         public void GetValidArguments_EmptyRules_ReturnsNoResults()
         {
@@ -14,6 +15,141 @@ namespace csMACnz.Consolable.Tests
             var results = RuleSet.GetValidArguments(input);
 
             Assert.Empty(results);
+        }
+
+        [Fact]
+        public void GetValidArguments_SingleRequiredRule_ReturnsOneResult()
+        {
+            var input = new IRule[] { new RequiredArgument('a', "alpha") };
+
+            var results = RuleSet.GetValidArguments(input);
+
+            Assert.Collection(
+                results,
+                e =>
+                {
+                    Assert.NotNull(e);
+                    Assert.Equal('a', e.ShortName);
+                    Assert.Equal("alpha", e.LongName);
+                    Assert.Equal(ValueMode.NoValue, e.ValueMode);
+                }
+            );
+        }
+
+        [Fact]
+        public void GetValidArguments_TwoRequiredRules_ReturnsTwoResults()
+        {
+            var input = new IRule[] { new RequiredArgument('a', "alpha"), new RequiredArgument('b', "bravo") };
+
+            var results = RuleSet.GetValidArguments(input);
+
+            Assert.Collection(
+                results,
+                e =>
+                {
+                    Assert.NotNull(e);
+                    Assert.Equal('a', e.ShortName);
+                    Assert.Equal("alpha", e.LongName);
+                    Assert.Equal(ValueMode.NoValue, e.ValueMode);
+                },
+                e =>
+                {
+                    Assert.NotNull(e);
+                    Assert.Equal('b', e.ShortName);
+                    Assert.Equal("bravo", e.LongName);
+                    Assert.Equal(ValueMode.NoValue, e.ValueMode);
+                }
+            );
+        }
+
+        [Fact]
+        public void GetValidArguments_SingleArgumentTestRule_ReturnsOneResult()
+        {
+            var input = new IRule[] { new SingleArgumentTestRule() };
+
+            var results = RuleSet.GetValidArguments(input);
+
+            Assert.Collection(
+                results,
+                e =>
+                {
+                    Assert.NotNull(e);
+                    Assert.Equal('a', e.ShortName);
+                    Assert.Equal("alpha", e.LongName);
+                    Assert.Equal(ValueMode.NoValue, e.ValueMode);
+                }
+            );
+        }
+
+        [Fact]
+        public void GetValidArguments_NoArgumentsTestRule_ReturnsOneResult()
+        {
+            var input = new IRule[] { new NoArgumentsTestRule() };
+
+            var results = RuleSet.GetValidArguments(input);
+
+            Assert.Collection(results);
+        }
+
+        [Fact]
+        public void GetValidArguments_MultipleArgumentsTestRule_ReturnsThreeResults()
+        {
+            var input = new IRule[] { new MultipleArgumentsTestRule() };
+
+            var results = RuleSet.GetValidArguments(input);
+
+            Assert.Collection(
+                results,
+                e =>
+                {
+                    Assert.NotNull(e);
+                    Assert.Equal('a', e.ShortName);
+                    Assert.Equal("alpha", e.LongName);
+                    Assert.Equal(ValueMode.NoValue, e.ValueMode);
+                },
+                e =>
+                {
+                    Assert.NotNull(e);
+                    Assert.Equal('b', e.ShortName);
+                    Assert.Equal("bravo", e.LongName);
+                    Assert.Equal(ValueMode.NoValue, e.ValueMode);
+                },
+                e =>
+                {
+                    Assert.NotNull(e);
+                    Assert.Equal('c', e.ShortName);
+                    Assert.Equal("charlie", e.LongName);
+                    Assert.Equal(ValueMode.NoValue, e.ValueMode);
+                }
+            );
+        }
+
+        private class NoArgumentsTestRule : IRule
+        {
+            public IEnumerable<Argument> GetArguments()
+            {
+                return Enumerable.Empty<Argument>();
+            }
+        }
+
+        private class SingleArgumentTestRule : IRule
+        {
+            public IEnumerable<Argument> GetArguments()
+            {
+                return new[] { new Argument { ShortName = 'a', LongName = "alpha", ValueMode = ValueMode.NoValue } };
+            }
+        }
+
+        private class MultipleArgumentsTestRule : IRule
+        {
+            public IEnumerable<Argument> GetArguments()
+            {
+                return new[] {
+                    new Argument { ShortName = 'a', LongName = "alpha", ValueMode = ValueMode.NoValue },
+                    new Argument { ShortName = 'b', LongName = "bravo", ValueMode = ValueMode.NoValue },
+                    new Argument { ShortName = 'c', LongName = "charlie", ValueMode = ValueMode.NoValue }
+                };
+            }
         }
     }
 }
