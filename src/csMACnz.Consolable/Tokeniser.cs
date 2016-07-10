@@ -86,7 +86,8 @@ namespace csMACnz.Consolable
         }
     }
 
-    public class Token{
+    public class Token
+    {
         public Token(TokenType type, string value, string raw, int rawIndex)
         {
             TokenType = type;
