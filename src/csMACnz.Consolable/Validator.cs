@@ -13,13 +13,14 @@ namespace csMACnz.Consolable
             Token lastArgToken = null;
             Argument lastArg = null;
             Token lastArgValueToken = null;
-            foreach(var token in tokens)
+            foreach (var token in tokens)
             {
                 lastToken = token;
-                if(token.TokenType == TokenType.Arg){
-                    if(lastArg != null)
+                if (token.TokenType == TokenType.Arg)
+                {
+                    if (lastArg != null)
                     {
-                        if(lastArg.ValueMode == ArgumentMode.SingleValue || lastArg.ValueMode == ArgumentMode.MultiValue)
+                        if (lastArg.ValueMode == ArgumentMode.SingleValue || lastArg.ValueMode == ArgumentMode.MultiValue)
                         {
                             yield return new Error
                             {
@@ -31,8 +32,8 @@ namespace csMACnz.Consolable
                     }
                     lastArgToken = token;
                     lastArgValueToken = null;
-                    lastArg = arguments.SingleOrDefault(a=>a.LongName == token.Value || a.ShortName+"" == token.Value); 
-                    if(lastArg == null)
+                    lastArg = arguments.SingleOrDefault(a => a.LongName == token.Value || a.ShortName + "" == token.Value);
+                    if (lastArg == null)
                     {
                         yield return new Error
                         {
@@ -42,20 +43,21 @@ namespace csMACnz.Consolable
                         };
                     }
                 }
-                if(token.TokenType == TokenType.Value){
-                    if(lastArgToken != null)
+                if (token.TokenType == TokenType.Value)
+                {
+                    if (lastArgToken != null)
                     {
-                        if(lastArg != null)
+                        if (lastArg != null)
                         {
-                            if(lastArgValueToken == null)
+                            if (lastArgValueToken == null)
                             {
-                                if(lastArg.ValueMode == ArgumentMode.NoValue)
+                                if (lastArg.ValueMode == ArgumentMode.NoValue)
                                 {
                                     yield return new Error
                                     {
                                         Type = ErrorType.UnexpectedArgValue,
                                         ErrorToken = token,
-                                        Argument = lastArgToken.Value 
+                                        Argument = lastArgToken.Value
                                     };
                                 }
                             }
@@ -72,11 +74,11 @@ namespace csMACnz.Consolable
                     }
                 }
             }
-            if(lastToken != null && lastToken.TokenType == TokenType.Arg)
+            if (lastToken != null && lastToken.TokenType == TokenType.Arg)
             {
-                if(lastArg != null)
+                if (lastArg != null)
                 {
-                    if(lastArg.ValueMode == ArgumentMode.SingleValue || lastArg.ValueMode == ArgumentMode.MultiValue)
+                    if (lastArg.ValueMode == ArgumentMode.SingleValue || lastArg.ValueMode == ArgumentMode.MultiValue)
                     {
                         yield return new Error
                         {
@@ -94,7 +96,7 @@ namespace csMACnz.Consolable
     {
         public ErrorType Type { get; set; }
         public Token ErrorToken { get; set; }
-        public string Argument {get; set; }
+        public string Argument { get; set; }
     }
 
     public enum ErrorType
