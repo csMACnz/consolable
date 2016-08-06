@@ -24,7 +24,8 @@ namespace csMACnz.Consolable
                             yield return new Error
                             {
                                 Type = ErrorType.MissingValue,
-                                ErrorToken = lastArgToken 
+                                ErrorToken = lastArgToken,
+                                Argument = lastArgToken.Value
                             };
                         }
                     }
@@ -36,7 +37,8 @@ namespace csMACnz.Consolable
                         yield return new Error
                         {
                             Type = ErrorType.UnknownArgument,
-                            ErrorToken = token 
+                            ErrorToken = token,
+                            Argument = token.Value
                         };
                     }
                 }
@@ -52,7 +54,8 @@ namespace csMACnz.Consolable
                                     yield return new Error
                                     {
                                         Type = ErrorType.UnexpectedValue,
-                                        ErrorToken = token 
+                                        ErrorToken = token,
+                                        Argument = lastArgToken.Value 
                                     };
                                 }
                             }
@@ -69,7 +72,8 @@ namespace csMACnz.Consolable
                         yield return new Error
                         {
                             Type = ErrorType.MissingValue,
-                            ErrorToken = lastArgToken 
+                            ErrorToken = lastArgToken,
+                            Argument = lastArgToken.Value
                         };
                     }
                 }
@@ -81,6 +85,7 @@ namespace csMACnz.Consolable
     {
         public ErrorType Type { get; set; }
         public Token ErrorToken { get; set; }
+        public string Argument {get; set; }
     }
 
     public enum ErrorType

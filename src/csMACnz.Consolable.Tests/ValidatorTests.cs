@@ -42,6 +42,28 @@ namespace csMACnz.Consolable.Tests
                     Assert.Equal("hello", e.ErrorToken.Value);
                     Assert.Equal(0, e.ErrorToken.RawIndex);
                     Assert.Equal("hello", e.ErrorToken.Raw);
+                    Assert.Equal("a", e.Argument);
+                }
+            );
+        }
+
+        [Fact]
+        public void ValidateArguments_ValidRuleSetWithUnexpectedValueTokenThenValidArgument_OneError()
+        {
+            var input = new []{new Token(TokenType.Arg, "a", "-a",1), new Token(TokenType.Value, "hello", "hello", 0), new Token(TokenType.Arg, "b", "-b", 1)};
+            var rules = new []{new RequiredArgument('a', "alpha"),new RequiredArgument('b', "bravo")};
+
+            var result = Validator.ValidateArguments(rules, input);
+
+            Assert.Collection(
+                result,
+                e =>{
+                    Assert.NotNull(e);
+                    Assert.Equal(ErrorType.UnexpectedValue, e.Type);
+                    Assert.Equal("hello", e.ErrorToken.Value);
+                    Assert.Equal(0, e.ErrorToken.RawIndex);
+                    Assert.Equal("hello", e.ErrorToken.Raw);
+                    Assert.Equal("a", e.Argument);
                 }
             );
         }
@@ -62,6 +84,28 @@ namespace csMACnz.Consolable.Tests
                     Assert.Equal("a", e.ErrorToken.Value);
                     Assert.Equal(1, e.ErrorToken.RawIndex);
                     Assert.Equal("-a", e.ErrorToken.Raw);
+                    Assert.Equal("a", e.Argument);
+                }
+            );
+        }
+
+        [Fact]
+        public void ValidateArguments_ValidRuleSetWithMissingSingleValueTokenThenValidArgument_OneError()
+        {
+            var input = new []{new Token(TokenType.Arg, "a", "-a",1),new Token(TokenType.Arg, "b", "-b",1)};
+            var rules = new []{new RequiredArgument('a', "alpha", ArgumentMode.SingleValue),new RequiredArgument('b', "bravo", ArgumentMode.NoValue)};
+
+            var result = Validator.ValidateArguments(rules, input);
+
+            Assert.Collection(
+                result,
+                e =>{
+                    Assert.NotNull(e);
+                    Assert.Equal(ErrorType.MissingValue, e.Type);
+                    Assert.Equal("a", e.ErrorToken.Value);
+                    Assert.Equal(1, e.ErrorToken.RawIndex);
+                    Assert.Equal("-a", e.ErrorToken.Raw);
+                    Assert.Equal("a", e.Argument);
                 }
             );
         }
@@ -82,6 +126,7 @@ namespace csMACnz.Consolable.Tests
                     Assert.Equal("b", e.ErrorToken.Value);
                     Assert.Equal(1, e.ErrorToken.RawIndex);
                     Assert.Equal("-b", e.ErrorToken.Raw);
+                    Assert.Equal("b", e.Argument);
                 }
             );
         }
@@ -105,6 +150,7 @@ namespace csMACnz.Consolable.Tests
                     Assert.Equal("b", e.ErrorToken.Value);
                     Assert.Equal(1, e.ErrorToken.RawIndex);
                     Assert.Equal("-b", e.ErrorToken.Raw);
+                    Assert.Equal("b", e.Argument);
                 },
                 e =>{
                     Assert.NotNull(e);
@@ -112,6 +158,7 @@ namespace csMACnz.Consolable.Tests
                     Assert.Equal("c", e.ErrorToken.Value);
                     Assert.Equal(1, e.ErrorToken.RawIndex);
                     Assert.Equal("-c", e.ErrorToken.Raw);
+                    Assert.Equal("c", e.Argument);
                 }
             );
         }
