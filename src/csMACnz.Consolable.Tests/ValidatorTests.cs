@@ -30,5 +30,27 @@ namespace csMACnz.Consolable.Tests
                 }
             );
         }
+        
+        [Fact]
+        public void ValidateArguments_ValidRuleSetWithTwoUnknownTokens_TwoUnknownArgumentError()
+        {
+            var input = new []{
+                new Token(TokenType.Arg, "b", "-b",1){},
+                new Token(TokenType.Arg, "c", "-c",1){}
+            };
+            var rules = new []{new RequiredArgument('a', "alpha")};
+
+            var result = Validator.ValidateArguments(rules, input);
+
+            Assert.Collection(
+                result,
+                e =>{
+                    Assert.NotNull(e);
+                },
+                e =>{
+                    Assert.NotNull(e);
+                }
+            );
+        }
     }
 }
