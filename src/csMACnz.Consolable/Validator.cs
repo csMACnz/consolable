@@ -15,12 +15,11 @@ namespace csMACnz.Consolable
             Token lastArgValueToken = null;
             foreach (var token in tokens)
             {
-                lastToken = token;
                 if (token.TokenType == TokenType.Arg)
                 {
                     if (lastArg != null)
                     {
-                        if (lastArg.ValueMode == ArgumentMode.SingleValue || lastArg.ValueMode == ArgumentMode.MultiValue)
+                        if (lastToken == lastArgToken && (lastArg.ValueMode == ArgumentMode.SingleValue || lastArg.ValueMode == ArgumentMode.MultiValue))
                         {
                             yield return new Error
                             {
@@ -43,7 +42,7 @@ namespace csMACnz.Consolable
                         };
                     }
                 }
-                if (token.TokenType == TokenType.Value)
+                else if (token.TokenType == TokenType.Value)
                 {
                     if (lastArgToken != null)
                     {
@@ -73,6 +72,7 @@ namespace csMACnz.Consolable
                         };
                     }
                 }
+                lastToken = token;
             }
             if (lastToken != null && lastToken.TokenType == TokenType.Arg)
             {
