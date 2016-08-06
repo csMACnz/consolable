@@ -23,6 +23,11 @@ namespace csMACnz.Consolable
 
     public class Error
     {
-        
+        public ErrorType Type { get; set; }
+    }
+
+    public enum ErrorType
+    {
+        UnknownArgument
     }
 }

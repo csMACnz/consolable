@@ -27,6 +27,7 @@ namespace csMACnz.Consolable.Tests
                 result,
                 e =>{
                     Assert.NotNull(e);
+                    Assert.Equal(ErrorType.UnknownArgument, e.Type);
                 }
             );
         }
@@ -46,9 +47,11 @@ namespace csMACnz.Consolable.Tests
                 result,
                 e =>{
                     Assert.NotNull(e);
+                    Assert.Equal(ErrorType.UnknownArgument, e.Type);
                 },
                 e =>{
                     Assert.NotNull(e);
+                    Assert.Equal(ErrorType.UnknownArgument, e.Type);
                 }
             );
         }
