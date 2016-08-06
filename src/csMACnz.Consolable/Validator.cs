@@ -19,7 +19,7 @@ namespace csMACnz.Consolable
                 if(token.TokenType == TokenType.Arg){
                     if(lastArg != null)
                     {
-                        if(lastArg.ValueMode == ArgumentMode.SingleValue)
+                        if(lastArg.ValueMode == ArgumentMode.SingleValue || lastArg.ValueMode == ArgumentMode.MultiValue)
                         {
                             yield return new Error
                             {
@@ -53,7 +53,7 @@ namespace csMACnz.Consolable
                                 {
                                     yield return new Error
                                     {
-                                        Type = ErrorType.UnexpectedValue,
+                                        Type = ErrorType.UnexpectedArgValue,
                                         ErrorToken = token,
                                         Argument = lastArgToken.Value 
                                     };
@@ -61,13 +61,22 @@ namespace csMACnz.Consolable
                             }
                         }
                     }
+                    else
+                    {
+                        yield return new Error
+                        {
+                            Type = ErrorType.UnexpectedStartPositionalValue,
+                            ErrorToken = token,
+                            Argument = null
+                        };
+                    }
                 }
             }
             if(lastToken != null && lastToken.TokenType == TokenType.Arg)
             {
                 if(lastArg != null)
                 {
-                    if(lastArg.ValueMode == ArgumentMode.SingleValue)
+                    if(lastArg.ValueMode == ArgumentMode.SingleValue || lastArg.ValueMode == ArgumentMode.MultiValue)
                     {
                         yield return new Error
                         {
@@ -91,7 +100,8 @@ namespace csMACnz.Consolable
     public enum ErrorType
     {
         UnknownArgument,
-        UnexpectedValue,
+        UnexpectedArgValue,
+        UnexpectedStartPositionalValue,
         MissingValue
     }
 }
