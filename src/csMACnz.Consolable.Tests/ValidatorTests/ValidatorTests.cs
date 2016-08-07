@@ -1,40 +1,9 @@
 using Xunit;
 
-namespace csMACnz.Consolable.Tests
+namespace csMACnz.Consolable.Tests.ValidatorTests
 {
     public class ValidatorTests
     {
-        [Fact]
-        public void ValidateArguments_ValidRuleSetWithValidTokens_NoErrors()
-        {
-            var input = new[] { new Token(TokenType.Arg, "a", "-a", 1) };
-            var rules = new[] { new RequiredArgument('a', "alpha") };
-
-            var result = Validator.ValidateArguments(rules, input);
-
-            Assert.Empty(result);
-        }
-
-        [Fact]
-        public void ValidateArguments_ValidRuleSetWithMissingRequiredToken_OneError()
-        {
-            var input = new Token[0];
-            var rules = new[] { new RequiredArgument('a', "alpha") };
-
-            var result = Validator.ValidateArguments(rules, input);
-
-            Assert.Collection(
-                result,
-                e =>
-                {
-                    Assert.NotNull(e);
-                    Assert.Equal(ErrorType.RequiredArgMissing, e.Type);
-                    Assert.Null(e.ErrorToken);
-                    Assert.Equal("alpha", e.Argument);
-                }
-            );
-        }
-
         [Fact]
         public void ValidateArguments_ValidRuleSetWithExpectedValueToken_NoErrors()
         {
@@ -66,50 +35,6 @@ namespace csMACnz.Consolable.Tests
             var result = Validator.ValidateArguments(rules, input);
 
             Assert.Empty(result);
-        }
-
-        [Fact]
-        public void ValidateArguments_ValidRuleSetWithDuplicateTokens_OneError()
-        {
-            var input = new[] { new Token(TokenType.Arg, "a", "-a", 1), new Token(TokenType.Arg, "a", "-a", 1) };
-            var rules = new[] { new RequiredArgument('a', "alpha") };
-
-            var result = Validator.ValidateArguments(rules, input);
-
-            Assert.Collection(
-                result,
-                e =>
-                {
-                    Assert.NotNull(e);
-                    Assert.Equal(ErrorType.DuplicateArg, e.Type);
-                    Assert.Equal("a", e.ErrorToken.Value);
-                    Assert.Equal(1, e.ErrorToken.RawIndex);
-                    Assert.Equal("-a", e.ErrorToken.Raw);
-                    Assert.Equal("a", e.Argument);
-                }
-            );
-        }
-
-        [Fact]
-        public void ValidateArguments_ValidRuleSetWithUnexpectedValueToken_OneError()
-        {
-            var input = new[] { new Token(TokenType.Arg, "a", "-a", 1), new Token(TokenType.Value, "hello", "hello", 0) };
-            var rules = new[] { new RequiredArgument('a', "alpha") };
-
-            var result = Validator.ValidateArguments(rules, input);
-
-            Assert.Collection(
-                result,
-                e =>
-                {
-                    Assert.NotNull(e);
-                    Assert.Equal(ErrorType.UnexpectedArgValue, e.Type);
-                    Assert.Equal("hello", e.ErrorToken.Value);
-                    Assert.Equal(0, e.ErrorToken.RawIndex);
-                    Assert.Equal("hello", e.ErrorToken.Raw);
-                    Assert.Equal("a", e.Argument);
-                }
-            );
         }
 
         [Fact]
