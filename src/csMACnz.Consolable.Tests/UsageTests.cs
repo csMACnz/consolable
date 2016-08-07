@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using System.Linq;
 using Xunit;
 
 namespace csMACnz.Consolable.Tests
@@ -10,12 +12,14 @@ namespace csMACnz.Consolable.Tests
             //Simulate .Net args parsing
             var args = CLIArgsParser.Parse("-?");
             var rules = new IRule[] { new RequiredArgument('?', "help") };
-            
+
             var tokens = new Tokeniser().GetTokens(args);
             var errors = Validator.ValidateArguments(rules, tokens);
             Assert.Empty(errors);
-            //TODO: provide values dictionary results from tokens and rules
+            var values = new ValueParser(rules).Parse(tokens.ToArray());
             //TODO: encapsulate into helper class
+
+            Assert.Equal(true, values["help"]);
         }
 
         [Fact]
@@ -35,8 +39,19 @@ namespace csMACnz.Consolable.Tests
             var tokens = new Tokeniser().GetTokens(args);
             var errors = Validator.ValidateArguments(rules, tokens);
             Assert.Empty(errors);
-            //TODO: provide values dictionary results from tokens and rules
+            var values = new ValueParser(rules).Parse(tokens.ToArray());
             //TODO: encapsulate into helper class
+
+            Assert.Equal(true, values["alpha"]);
+            Assert.Equal("Value", values["bravo"]);
+            Assert.Collection((List<string>)values["charlie"],
+                v => Assert.Equal("Item1", v),
+                v => Assert.Equal("Item2", v)
+            );
+            Assert.Equal(true, values["delta"]);
+            Assert.Equal(true, values["echo"]);
+            Assert.Equal(true, values["flag"]);
+            Assert.Equal("true", values["green"]);
         }
     }
 }
