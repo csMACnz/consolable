@@ -1,14 +1,15 @@
 using System.Collections.Generic;
+using System.Linq;
 
 namespace csMACnz.Consolable
 {
-    
+
     public class RequiredArgument : IRule
     {
         public string LongName { get; }
         public char ShortName { get; }
         public ArgumentMode ValueMode { get; }
-        
+
         public RequiredArgument(char shortName, string longName)
         : this(shortName, longName, ArgumentMode.Flag)
         {
@@ -30,6 +31,19 @@ namespace csMACnz.Consolable
                      ValueMode = ValueMode,
                  }
             };
+        }
+
+        public IEnumerable<Error> ValidateArguments(List<Argument> providedArguments)
+        {
+            if (!providedArguments.Any(a => this.LongName == a.LongName))
+            {
+                yield return new Error
+                {
+                    Type = ErrorType.RequiredArgMissing,
+                    ErrorToken = null,
+                    Argument = this.LongName
+                };
+            }
         }
     }
 }

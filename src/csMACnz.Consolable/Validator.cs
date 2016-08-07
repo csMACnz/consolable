@@ -13,12 +13,11 @@ namespace csMACnz.Consolable
             Token lastArgToken = null;
             Argument lastArg = null;
             Token lastArgValueToken = null;
-            var providedTokens = new List<Token>();
+            var providedArguments = new List<Argument>();
             foreach (var token in tokens)
             {
                 if (token.TokenType == TokenType.Arg)
                 {
-                    providedTokens.Add(token);
                     if (lastArg != null)
                     {
                         if (lastToken == lastArgToken && (lastArg.ValueMode == ArgumentMode.SingleValue || lastArg.ValueMode == ArgumentMode.MultiValue))
@@ -43,6 +42,7 @@ namespace csMACnz.Consolable
                             Argument = token.Value
                         };
                     }
+                    providedArguments.Add(lastArg);
                 }
                 else if (token.TokenType == TokenType.Value)
                 {
@@ -92,16 +92,10 @@ namespace csMACnz.Consolable
                 }
             }
 
-            foreach (var argument in arguments)
+            foreach (var rule in rules)
             {
-                if (!tokens.Any(t => ArgMatchesToken(argument, t)))
-                {
-                    yield return new Error
-                    {
-                        Type = ErrorType.RequiredArgMissing,
-                        ErrorToken = null,
-                        Argument = argument.LongName
-                    };
+                foreach(var error in rule.ValidateArguments(providedArguments)){
+                    yield return error;
                 }
             }
         }

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Xunit;
@@ -129,6 +130,11 @@ namespace csMACnz.Consolable.Tests
             {
                 return Enumerable.Empty<Argument>();
             }
+
+            public IEnumerable<Error> ValidateArguments(List<Argument> providedArguments)
+            {
+                return Enumerable.Empty<Error>();
+            }
         }
 
         private class SingleArgumentTestRule : IRule
@@ -136,6 +142,11 @@ namespace csMACnz.Consolable.Tests
             public IEnumerable<Argument> GetArguments()
             {
                 return new[] { new Argument { ShortName = 'a', LongName = "alpha", ValueMode = ArgumentMode.Flag } };
+            }
+
+            public IEnumerable<Error> ValidateArguments(List<Argument> providedArguments)
+            {
+                return Enumerable.Empty<Error>();
             }
         }
 
@@ -148,6 +159,11 @@ namespace csMACnz.Consolable.Tests
                     new Argument { ShortName = 'b', LongName = "bravo", ValueMode = ArgumentMode.Flag },
                     new Argument { ShortName = 'c', LongName = "charlie", ValueMode = ArgumentMode.Flag }
                 };
+            }
+
+            public IEnumerable<Error> ValidateArguments(List<Argument> providedArguments)
+            {
+                return Enumerable.Empty<Error>();
             }
         }
     }
