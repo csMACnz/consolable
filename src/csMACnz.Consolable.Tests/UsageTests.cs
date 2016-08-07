@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Xunit;
+using csMACnz.Consolable;
 
 namespace csMACnz.Consolable.Tests
 {
@@ -13,12 +14,8 @@ namespace csMACnz.Consolable.Tests
             var args = CLIArgsParser.Parse("-?");
             var rules = new IRule[] { new RequiredArgument('?', "help") };
 
-            var tokens = new Tokeniser().GetTokens(args);
-            var errors = Validator.ValidateArguments(rules, tokens);
-            Assert.Empty(errors);
-            var values = new ValueParser(rules).Parse(tokens.ToArray());
-            //TODO: encapsulate into helper class
-
+            var values = Consolable.Parse(rules, args, error=> Assert.False(true, "Errors Not Expected."));
+            
             Assert.Equal(true, values["help"]);
         }
 
@@ -36,12 +33,9 @@ namespace csMACnz.Consolable.Tests
                  new RequiredArgument('f', "flag"),
                  new RequiredArgument('g', "green", ArgumentMode.SingleValue),//Investigate if this should be flag feature (allow boolean value)
             };
-            var tokens = new Tokeniser().GetTokens(args);
-            var errors = Validator.ValidateArguments(rules, tokens);
-            Assert.Empty(errors);
-            var values = new ValueParser(rules).Parse(tokens.ToArray());
-            //TODO: encapsulate into helper class
-
+            
+            var values = Consolable.Parse(rules, args, error=> Assert.False(true, "Errors Not Expected."));
+            
             Assert.Equal(true, values["alpha"]);
             Assert.Equal("Value", values["bravo"]);
             Assert.Collection((List<string>)values["charlie"],
