@@ -18,6 +18,15 @@ namespace csMACnz.Consolable
             {
                 if (token.TokenType == TokenType.Arg)
                 {
+                    if (providedArguments.Any(a => ArgMatchesToken(a, token)))
+                    {
+                        yield return new Error
+                        {
+                            Type = ErrorType.DuplicateArg,
+                            ErrorToken = token,
+                            Argument = token.Value
+                        };
+                    }
                     if (lastArg != null)
                     {
                         if (lastToken == lastArgToken && (lastArg.ValueMode == ArgumentMode.SingleValue || lastArg.ValueMode == ArgumentMode.MultiValue))
@@ -42,7 +51,11 @@ namespace csMACnz.Consolable
                             Argument = token.Value
                         };
                     }
-                    providedArguments.Add(lastArg);
+                    else
+                    {
+                        providedArguments.Add(lastArg);
+                    }
+
                 }
                 else if (token.TokenType == TokenType.Value)
                 {
@@ -94,7 +107,8 @@ namespace csMACnz.Consolable
 
             foreach (var rule in rules)
             {
-                foreach(var error in rule.ValidateArguments(providedArguments)){
+                foreach (var error in rule.ValidateArguments(providedArguments))
+                {
                     yield return error;
                 }
             }
@@ -119,6 +133,7 @@ namespace csMACnz.Consolable
         UnexpectedArgValue,
         UnexpectedStartPositionalValue,
         MissingValue,
-        RequiredArgMissing
+        RequiredArgMissing,
+        DuplicateArg
     }
 }

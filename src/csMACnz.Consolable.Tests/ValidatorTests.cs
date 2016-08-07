@@ -14,7 +14,7 @@ namespace csMACnz.Consolable.Tests
 
             Assert.Empty(result);
         }
-        
+
         [Fact]
         public void ValidateArguments_ValidRuleSetWithMissingRequiredToken_OneError()
         {
@@ -66,6 +66,28 @@ namespace csMACnz.Consolable.Tests
             var result = Validator.ValidateArguments(rules, input);
 
             Assert.Empty(result);
+        }
+
+        [Fact]
+        public void ValidateArguments_ValidRuleSetWithDuplicateTokens_OneError()
+        {
+            var input = new[] { new Token(TokenType.Arg, "a", "-a", 1), new Token(TokenType.Arg, "a", "-a", 1) };
+            var rules = new[] { new RequiredArgument('a', "alpha") };
+
+            var result = Validator.ValidateArguments(rules, input);
+
+            Assert.Collection(
+                result,
+                e =>
+                {
+                    Assert.NotNull(e);
+                    Assert.Equal(ErrorType.DuplicateArg, e.Type);
+                    Assert.Equal("a", e.ErrorToken.Value);
+                    Assert.Equal(1, e.ErrorToken.RawIndex);
+                    Assert.Equal("-a", e.ErrorToken.Raw);
+                    Assert.Equal("a", e.Argument);
+                }
+            );
         }
 
         [Fact]
