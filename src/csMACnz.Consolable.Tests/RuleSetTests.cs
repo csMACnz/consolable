@@ -135,6 +135,11 @@ namespace csMACnz.Consolable.Tests
             {
                 return Enumerable.Empty<Error>();
             }
+
+            public VerifyMode Verify(List<Argument> providedArguments)
+            {
+                throw new NotImplementedException();
+            }
         }
 
         private class SingleArgumentTestRule : IRule
@@ -147,6 +152,11 @@ namespace csMACnz.Consolable.Tests
             public IEnumerable<Error> ValidateArguments(List<Argument> providedArguments)
             {
                 return Enumerable.Empty<Error>();
+            }
+
+            public VerifyMode Verify(List<Argument> providedArguments)
+            {
+                throw new NotImplementedException();
             }
         }
 
@@ -164,6 +174,11 @@ namespace csMACnz.Consolable.Tests
             public IEnumerable<Error> ValidateArguments(List<Argument> providedArguments)
             {
                 return Enumerable.Empty<Error>();
+            }
+
+            public VerifyMode Verify(List<Argument> providedArguments)
+            {
+                throw new NotImplementedException();
             }
         }
     }

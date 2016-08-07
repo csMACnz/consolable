@@ -14,6 +14,7 @@ namespace csMACnz.Consolable.Tests
 
             Assert.Empty(result);
         }
+        
         [Fact]
         public void ValidateArguments_ValidRuleSetWithMissingRequiredToken_OneError()
         {

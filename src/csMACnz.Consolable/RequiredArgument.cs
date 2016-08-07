@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -44,6 +45,15 @@ namespace csMACnz.Consolable
                     Argument = this.LongName
                 };
             }
+        }
+
+        public VerifyMode Verify(List<Argument> providedArguments)
+        {
+            if (providedArguments.Any(a => this.LongName == a.LongName))
+            {
+                return VerifyMode.ExplicitlyProvided;
+            }
+            return VerifyMode.NotProvided;
         }
     }
 }
