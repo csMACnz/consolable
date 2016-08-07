@@ -26,7 +26,7 @@ namespace csMACnz.Consolable
                 {
                     case TokenType.Arg:
                         lastArg = arguments.SingleOrDefault(a => a.LongName == token.Value || a.ShortName + "" == token.Value);
-                        if (lastArg.ValueMode == ArgumentMode.NoValue)
+                        if (lastArg.ValueMode == ArgumentMode.Flag)
                         {
                             results[lastArg.LongName] = true;
                             break;
@@ -51,7 +51,7 @@ namespace csMACnz.Consolable
         {
             switch (argument.ValueMode)
             {
-                case ArgumentMode.NoValue:
+                case ArgumentMode.Flag:
                     return false;
                 case ArgumentMode.MultiValue:
                     return new List<string>();

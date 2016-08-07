@@ -3,7 +3,7 @@ namespace csMACnz.Consolable
     public enum ArgumentMode
     {
         Invalid,
-        NoValue,
+        Flag,
         SingleValue,
         MultiValue
     }

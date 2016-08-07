@@ -10,7 +10,7 @@ namespace csMACnz.Consolable
         public ArgumentMode ValueMode { get; }
         
         public RequiredArgument(char shortName, string longName)
-        : this(shortName, longName, ArgumentMode.NoValue)
+        : this(shortName, longName, ArgumentMode.Flag)
         {
         }
 

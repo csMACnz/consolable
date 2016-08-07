@@ -2,24 +2,43 @@ using Xunit;
 
 namespace csMACnz.Consolable.Tests
 {
-    public class  ValidatorTests
+    public class ValidatorTests
     {
         [Fact]
         public void ValidateArguments_ValidRuleSetWithValidTokens_NoErrors()
         {
-            var input = new []{new Token(TokenType.Arg, "a", "-a",1){}};
-            var rules = new []{new RequiredArgument('a', "alpha")};
+            var input = new[] { new Token(TokenType.Arg, "a", "-a", 1) };
+            var rules = new[] { new RequiredArgument('a', "alpha") };
 
             var result = Validator.ValidateArguments(rules, input);
 
             Assert.Empty(result);
         }
+        [Fact]
+        public void ValidateArguments_ValidRuleSetWithMissingRequiredToken_OneError()
+        {
+            var input = new Token[0];
+            var rules = new[] { new RequiredArgument('a', "alpha") };
+
+            var result = Validator.ValidateArguments(rules, input);
+
+            Assert.Collection(
+                result,
+                e =>
+                {
+                    Assert.NotNull(e);
+                    Assert.Equal(ErrorType.RequiredArgMissing, e.Type);
+                    Assert.Null(e.ErrorToken);
+                    Assert.Equal("alpha", e.Argument);
+                }
+            );
+        }
 
         [Fact]
         public void ValidateArguments_ValidRuleSetWithExpectedValueToken_NoErrors()
         {
-            var input = new []{new Token(TokenType.Arg, "a", "-a",1){}, new Token(TokenType.Value, "hello", "hello", 0)};
-            var rules = new []{new RequiredArgument('a', "alpha", ArgumentMode.SingleValue)};
+            var input = new[] { new Token(TokenType.Arg, "a", "-a", 1), new Token(TokenType.Value, "hello", "hello", 0) };
+            var rules = new[] { new RequiredArgument('a', "alpha", ArgumentMode.SingleValue) };
 
             var result = Validator.ValidateArguments(rules, input);
 
@@ -29,8 +48,8 @@ namespace csMACnz.Consolable.Tests
         [Fact]
         public void ValidateArguments_ValidRuleSetWithTwoExpectedValueTokens_NoErrors()
         {
-            var input = new []{new Token(TokenType.Arg, "a", "-a",1), new Token(TokenType.Value, "hello", "hello", 0), new Token(TokenType.Value, "world", "world", 0)};
-            var rules = new []{new RequiredArgument('a', "alpha", ArgumentMode.SingleValue)};
+            var input = new[] { new Token(TokenType.Arg, "a", "-a", 1), new Token(TokenType.Value, "hello", "hello", 0), new Token(TokenType.Value, "world", "world", 0) };
+            var rules = new[] { new RequiredArgument('a', "alpha", ArgumentMode.SingleValue) };
 
             var result = Validator.ValidateArguments(rules, input);
 
@@ -40,8 +59,8 @@ namespace csMACnz.Consolable.Tests
         [Fact]
         public void ValidateArguments_ValidMultiValueRuleSetWithExpectedValueToken_NoErrors()
         {
-            var input = new []{new Token(TokenType.Arg, "a", "-a",1){}, new Token(TokenType.Value, "hello", "hello", 0)};
-            var rules = new []{new RequiredArgument('a', "alpha", ArgumentMode.MultiValue)};
+            var input = new[] { new Token(TokenType.Arg, "a", "-a", 1), new Token(TokenType.Value, "hello", "hello", 0) };
+            var rules = new[] { new RequiredArgument('a', "alpha", ArgumentMode.MultiValue) };
 
             var result = Validator.ValidateArguments(rules, input);
 
@@ -51,14 +70,15 @@ namespace csMACnz.Consolable.Tests
         [Fact]
         public void ValidateArguments_ValidRuleSetWithUnexpectedValueToken_OneError()
         {
-            var input = new []{new Token(TokenType.Arg, "a", "-a",1){}, new Token(TokenType.Value, "hello", "hello", 0)};
-            var rules = new []{new RequiredArgument('a', "alpha")};
+            var input = new[] { new Token(TokenType.Arg, "a", "-a", 1), new Token(TokenType.Value, "hello", "hello", 0) };
+            var rules = new[] { new RequiredArgument('a', "alpha") };
 
             var result = Validator.ValidateArguments(rules, input);
 
             Assert.Collection(
                 result,
-                e =>{
+                e =>
+                {
                     Assert.NotNull(e);
                     Assert.Equal(ErrorType.UnexpectedArgValue, e.Type);
                     Assert.Equal("hello", e.ErrorToken.Value);
@@ -72,14 +92,15 @@ namespace csMACnz.Consolable.Tests
         [Fact]
         public void ValidateArguments_ValidRuleSetWithUnexpectedValueTokenThenValidArgument_OneError()
         {
-            var input = new []{new Token(TokenType.Arg, "a", "-a",1), new Token(TokenType.Value, "hello", "hello", 0), new Token(TokenType.Arg, "b", "-b", 1)};
-            var rules = new []{new RequiredArgument('a', "alpha"),new RequiredArgument('b', "bravo")};
+            var input = new[] { new Token(TokenType.Arg, "a", "-a", 1), new Token(TokenType.Value, "hello", "hello", 0), new Token(TokenType.Arg, "b", "-b", 1) };
+            var rules = new[] { new RequiredArgument('a', "alpha"), new RequiredArgument('b', "bravo") };
 
             var result = Validator.ValidateArguments(rules, input);
 
             Assert.Collection(
                 result,
-                e =>{
+                e =>
+                {
                     Assert.NotNull(e);
                     Assert.Equal(ErrorType.UnexpectedArgValue, e.Type);
                     Assert.Equal("hello", e.ErrorToken.Value);
@@ -93,14 +114,15 @@ namespace csMACnz.Consolable.Tests
         [Fact]
         public void ValidateArguments_ValidRuleSetWithMissingSingleValueToken_OneError()
         {
-            var input = new []{new Token(TokenType.Arg, "a", "-a",1){}};
-            var rules = new []{new RequiredArgument('a', "alpha", ArgumentMode.SingleValue)};
+            var input = new[] { new Token(TokenType.Arg, "a", "-a", 1) };
+            var rules = new[] { new RequiredArgument('a', "alpha", ArgumentMode.SingleValue) };
 
             var result = Validator.ValidateArguments(rules, input);
 
             Assert.Collection(
                 result,
-                e =>{
+                e =>
+                {
                     Assert.NotNull(e);
                     Assert.Equal(ErrorType.MissingValue, e.Type);
                     Assert.Equal("a", e.ErrorToken.Value);
@@ -114,14 +136,15 @@ namespace csMACnz.Consolable.Tests
         [Fact]
         public void ValidateArguments_ValidMultiValueRuleSetWithMissingSingleValueToken_OneError()
         {
-            var input = new []{new Token(TokenType.Arg, "a", "-a",1){}};
-            var rules = new []{new RequiredArgument('a', "alpha", ArgumentMode.MultiValue)};
+            var input = new[] { new Token(TokenType.Arg, "a", "-a", 1) };
+            var rules = new[] { new RequiredArgument('a', "alpha", ArgumentMode.MultiValue) };
 
             var result = Validator.ValidateArguments(rules, input);
 
             Assert.Collection(
                 result,
-                e =>{
+                e =>
+                {
                     Assert.NotNull(e);
                     Assert.Equal(ErrorType.MissingValue, e.Type);
                     Assert.Equal("a", e.ErrorToken.Value);
@@ -135,14 +158,15 @@ namespace csMACnz.Consolable.Tests
         [Fact]
         public void ValidateArguments_ValidRuleSetWithMissingSingleValueTokenThenValidArgument_OneError()
         {
-            var input = new []{new Token(TokenType.Arg, "a", "-a",1),new Token(TokenType.Arg, "b", "-b",1)};
-            var rules = new []{new RequiredArgument('a', "alpha", ArgumentMode.SingleValue),new RequiredArgument('b', "bravo", ArgumentMode.NoValue)};
+            var input = new[] { new Token(TokenType.Arg, "a", "-a", 1), new Token(TokenType.Arg, "b", "-b", 1) };
+            var rules = new[] { new RequiredArgument('a', "alpha", ArgumentMode.SingleValue), new RequiredArgument('b', "bravo", ArgumentMode.Flag) };
 
             var result = Validator.ValidateArguments(rules, input);
 
             Assert.Collection(
                 result,
-                e =>{
+                e =>
+                {
                     Assert.NotNull(e);
                     Assert.Equal(ErrorType.MissingValue, e.Type);
                     Assert.Equal("a", e.ErrorToken.Value);
@@ -156,14 +180,15 @@ namespace csMACnz.Consolable.Tests
         [Fact]
         public void ValidateArguments_ValidRuleSetWithMissingMultiValueTokenThenValidArgument_OneError()
         {
-            var input = new []{new Token(TokenType.Arg, "a", "-a",1),new Token(TokenType.Arg, "b", "-b",1)};
-            var rules = new []{new RequiredArgument('a', "alpha", ArgumentMode.MultiValue),new RequiredArgument('b', "bravo", ArgumentMode.NoValue)};
+            var input = new[] { new Token(TokenType.Arg, "a", "-a", 1), new Token(TokenType.Arg, "b", "-b", 1) };
+            var rules = new[] { new RequiredArgument('a', "alpha", ArgumentMode.MultiValue), new RequiredArgument('b', "bravo", ArgumentMode.Flag) };
 
             var result = Validator.ValidateArguments(rules, input);
 
             Assert.Collection(
                 result,
-                e =>{
+                e =>
+                {
                     Assert.NotNull(e);
                     Assert.Equal(ErrorType.MissingValue, e.Type);
                     Assert.Equal("a", e.ErrorToken.Value);
@@ -177,14 +202,17 @@ namespace csMACnz.Consolable.Tests
         [Fact]
         public void ValidateArguments_ValidRuleSetWithUnknownArgToken_OneUnknownArgumentError()
         {
-            var input = new []{new Token(TokenType.Arg, "b", "-b",1){}};
-            var rules = new []{new RequiredArgument('a', "alpha")};
+            var input = new[]{
+                new Token(TokenType.Arg, "a", "-a",1),
+                new Token(TokenType.Arg, "b", "-b",1)};
+            var rules = new[] { new RequiredArgument('a', "alpha") };
 
             var result = Validator.ValidateArguments(rules, input);
 
             Assert.Collection(
                 result,
-                e =>{
+                e =>
+                {
                     Assert.NotNull(e);
                     Assert.Equal(ErrorType.UnknownArgument, e.Type);
                     Assert.Equal("b", e.ErrorToken.Value);
@@ -194,18 +222,22 @@ namespace csMACnz.Consolable.Tests
                 }
             );
         }
-        
+
         [Fact]
         public void ValidateArguments_ValidRuleSetWithUnknownValueToken_OneUnknownArgumentError()
         {
-            var input = new []{new Token(TokenType.Value, "blue", "blue",0)};
-            var rules = new []{new RequiredArgument('a', "alpha")};
+            var input = new[] {
+                new Token(TokenType.Value, "blue", "blue", 0),
+                new Token(TokenType.Arg, "a", "-a", 1)
+            };
+            var rules = new[] { new RequiredArgument('a', "alpha") };
 
             var result = Validator.ValidateArguments(rules, input);
 
             Assert.Collection(
                 result,
-                e =>{
+                e =>
+                {
                     Assert.NotNull(e);
                     Assert.Equal(ErrorType.UnexpectedStartPositionalValue, e.Type);
                     Assert.Equal("blue", e.ErrorToken.Value);
@@ -215,21 +247,23 @@ namespace csMACnz.Consolable.Tests
                 }
             );
         }
-        
+
         [Fact]
         public void ValidateArguments_ValidRuleSetWithTwoUnknownTokens_TwoUnknownArgumentError()
         {
-            var input = new []{
-                new Token(TokenType.Arg, "b", "-b",1){},
-                new Token(TokenType.Arg, "c", "-c",1){}
+            var input = new[]{
+                new Token(TokenType.Arg, "a", "-a",1),
+                new Token(TokenType.Arg, "b", "-b",1),
+                new Token(TokenType.Arg, "c", "-c",1)
             };
-            var rules = new []{new RequiredArgument('a', "alpha")};
+            var rules = new[] { new RequiredArgument('a', "alpha") };
 
             var result = Validator.ValidateArguments(rules, input);
 
             Assert.Collection(
                 result,
-                e =>{
+                e =>
+                {
                     Assert.NotNull(e);
                     Assert.Equal(ErrorType.UnknownArgument, e.Type);
                     Assert.Equal("b", e.ErrorToken.Value);
@@ -237,7 +271,8 @@ namespace csMACnz.Consolable.Tests
                     Assert.Equal("-b", e.ErrorToken.Raw);
                     Assert.Equal("b", e.Argument);
                 },
-                e =>{
+                e =>
+                {
                     Assert.NotNull(e);
                     Assert.Equal(ErrorType.UnknownArgument, e.Type);
                     Assert.Equal("c", e.ErrorToken.Value);

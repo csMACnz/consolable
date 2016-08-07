@@ -13,10 +13,12 @@ namespace csMACnz.Consolable
             Token lastArgToken = null;
             Argument lastArg = null;
             Token lastArgValueToken = null;
+            var providedTokens = new List<Token>();
             foreach (var token in tokens)
             {
                 if (token.TokenType == TokenType.Arg)
                 {
+                    providedTokens.Add(token);
                     if (lastArg != null)
                     {
                         if (lastToken == lastArgToken && (lastArg.ValueMode == ArgumentMode.SingleValue || lastArg.ValueMode == ArgumentMode.MultiValue))
@@ -31,7 +33,7 @@ namespace csMACnz.Consolable
                     }
                     lastArgToken = token;
                     lastArgValueToken = null;
-                    lastArg = arguments.SingleOrDefault(a => a.LongName == token.Value || a.ShortName + "" == token.Value);
+                    lastArg = arguments.SingleOrDefault(a => ArgMatchesToken(a, token));
                     if (lastArg == null)
                     {
                         yield return new Error
@@ -50,7 +52,7 @@ namespace csMACnz.Consolable
                         {
                             if (lastArgValueToken == null)
                             {
-                                if (lastArg.ValueMode == ArgumentMode.NoValue)
+                                if (lastArg.ValueMode == ArgumentMode.Flag)
                                 {
                                     yield return new Error
                                     {
@@ -89,6 +91,24 @@ namespace csMACnz.Consolable
                     }
                 }
             }
+
+            foreach (var argument in arguments)
+            {
+                if (!tokens.Any(t => ArgMatchesToken(argument, t)))
+                {
+                    yield return new Error
+                    {
+                        Type = ErrorType.RequiredArgMissing,
+                        ErrorToken = null,
+                        Argument = argument.LongName
+                    };
+                }
+            }
+        }
+
+        private static bool ArgMatchesToken(Argument argument, Token token)
+        {
+            return argument.LongName == token.Value || argument.ShortName + "" == token.Value;
         }
     }
 
@@ -104,6 +124,7 @@ namespace csMACnz.Consolable
         UnknownArgument,
         UnexpectedArgValue,
         UnexpectedStartPositionalValue,
-        MissingValue
+        MissingValue,
+        RequiredArgMissing
     }
 }

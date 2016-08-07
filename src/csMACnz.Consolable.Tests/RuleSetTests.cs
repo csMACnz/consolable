@@ -30,7 +30,7 @@ namespace csMACnz.Consolable.Tests
                     Assert.NotNull(e);
                     Assert.Equal('a', e.ShortName);
                     Assert.Equal("alpha", e.LongName);
-                    Assert.Equal(ArgumentMode.NoValue, e.ValueMode);
+                    Assert.Equal(ArgumentMode.Flag, e.ValueMode);
                 }
             );
         }
@@ -49,14 +49,14 @@ namespace csMACnz.Consolable.Tests
                     Assert.NotNull(e);
                     Assert.Equal('a', e.ShortName);
                     Assert.Equal("alpha", e.LongName);
-                    Assert.Equal(ArgumentMode.NoValue, e.ValueMode);
+                    Assert.Equal(ArgumentMode.Flag, e.ValueMode);
                 },
                 e =>
                 {
                     Assert.NotNull(e);
                     Assert.Equal('b', e.ShortName);
                     Assert.Equal("bravo", e.LongName);
-                    Assert.Equal(ArgumentMode.NoValue, e.ValueMode);
+                    Assert.Equal(ArgumentMode.Flag, e.ValueMode);
                 }
             );
         }
@@ -75,7 +75,7 @@ namespace csMACnz.Consolable.Tests
                     Assert.NotNull(e);
                     Assert.Equal('a', e.ShortName);
                     Assert.Equal("alpha", e.LongName);
-                    Assert.Equal(ArgumentMode.NoValue, e.ValueMode);
+                    Assert.Equal(ArgumentMode.Flag, e.ValueMode);
                 }
             );
         }
@@ -104,21 +104,21 @@ namespace csMACnz.Consolable.Tests
                     Assert.NotNull(e);
                     Assert.Equal('a', e.ShortName);
                     Assert.Equal("alpha", e.LongName);
-                    Assert.Equal(ArgumentMode.NoValue, e.ValueMode);
+                    Assert.Equal(ArgumentMode.Flag, e.ValueMode);
                 },
                 e =>
                 {
                     Assert.NotNull(e);
                     Assert.Equal('b', e.ShortName);
                     Assert.Equal("bravo", e.LongName);
-                    Assert.Equal(ArgumentMode.NoValue, e.ValueMode);
+                    Assert.Equal(ArgumentMode.Flag, e.ValueMode);
                 },
                 e =>
                 {
                     Assert.NotNull(e);
                     Assert.Equal('c', e.ShortName);
                     Assert.Equal("charlie", e.LongName);
-                    Assert.Equal(ArgumentMode.NoValue, e.ValueMode);
+                    Assert.Equal(ArgumentMode.Flag, e.ValueMode);
                 }
             );
         }
@@ -135,7 +135,7 @@ namespace csMACnz.Consolable.Tests
         {
             public IEnumerable<Argument> GetArguments()
             {
-                return new[] { new Argument { ShortName = 'a', LongName = "alpha", ValueMode = ArgumentMode.NoValue } };
+                return new[] { new Argument { ShortName = 'a', LongName = "alpha", ValueMode = ArgumentMode.Flag } };
             }
         }
 
@@ -144,9 +144,9 @@ namespace csMACnz.Consolable.Tests
             public IEnumerable<Argument> GetArguments()
             {
                 return new[] {
-                    new Argument { ShortName = 'a', LongName = "alpha", ValueMode = ArgumentMode.NoValue },
-                    new Argument { ShortName = 'b', LongName = "bravo", ValueMode = ArgumentMode.NoValue },
-                    new Argument { ShortName = 'c', LongName = "charlie", ValueMode = ArgumentMode.NoValue }
+                    new Argument { ShortName = 'a', LongName = "alpha", ValueMode = ArgumentMode.Flag },
+                    new Argument { ShortName = 'b', LongName = "bravo", ValueMode = ArgumentMode.Flag },
+                    new Argument { ShortName = 'c', LongName = "charlie", ValueMode = ArgumentMode.Flag }
                 };
             }
         }
