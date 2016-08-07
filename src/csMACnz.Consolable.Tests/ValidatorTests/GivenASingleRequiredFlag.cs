@@ -81,5 +81,85 @@ namespace csMACnz.Consolable.Tests.ValidatorTests
             );
         }
 
+        [Fact]
+        public void ValidateArguments_UnknownArgToken_OneUnknownArgumentError()
+        {
+            var input = new[]{
+                new Token(TokenType.Arg, "a", "-a",1),
+                new Token(TokenType.Arg, "b", "-b",1)};
+
+            var result = Validator.ValidateArguments(_rules, input);
+
+            Assert.Collection(
+                result,
+                e =>
+                {
+                    Assert.NotNull(e);
+                    Assert.Equal(ErrorType.UnknownArgument, e.Type);
+                    Assert.Equal("b", e.ErrorToken.Value);
+                    Assert.Equal(1, e.ErrorToken.RawIndex);
+                    Assert.Equal("-b", e.ErrorToken.Raw);
+                    Assert.Equal("b", e.Argument);
+                }
+            );
+        }
+
+        [Fact]
+        public void ValidateArguments_UnknownInitialValueToken_OneUnexpectedStartPositionalValueError()
+        {
+            var input = new[] {
+                new Token(TokenType.Value, "blue", "blue", 0),
+                new Token(TokenType.Arg, "a", "-a", 1)
+            };
+
+            var result = Validator.ValidateArguments(_rules, input);
+
+            Assert.Collection(
+                result,
+                e =>
+                {
+                    Assert.NotNull(e);
+                    Assert.Equal(ErrorType.UnexpectedStartPositionalValue, e.Type);
+                    Assert.Equal("blue", e.ErrorToken.Value);
+                    Assert.Equal(0, e.ErrorToken.RawIndex);
+                    Assert.Equal("blue", e.ErrorToken.Raw);
+                    Assert.Equal(null, e.Argument);
+                }
+            );
+        }
+
+        [Fact]
+        public void ValidateArguments_TwoUnknownTokens_TwoUnknownArgumentErrors()
+        {
+            var input = new[]{
+                new Token(TokenType.Arg, "a", "-a",1),
+                new Token(TokenType.Arg, "b", "-b",1),
+                new Token(TokenType.Arg, "c", "-c",1)
+            };
+
+            var result = Validator.ValidateArguments(_rules, input);
+
+            Assert.Collection(
+                result,
+                e =>
+                {
+                    Assert.NotNull(e);
+                    Assert.Equal(ErrorType.UnknownArgument, e.Type);
+                    Assert.Equal("b", e.ErrorToken.Value);
+                    Assert.Equal(1, e.ErrorToken.RawIndex);
+                    Assert.Equal("-b", e.ErrorToken.Raw);
+                    Assert.Equal("b", e.Argument);
+                },
+                e =>
+                {
+                    Assert.NotNull(e);
+                    Assert.Equal(ErrorType.UnknownArgument, e.Type);
+                    Assert.Equal("c", e.ErrorToken.Value);
+                    Assert.Equal(1, e.ErrorToken.RawIndex);
+                    Assert.Equal("-c", e.ErrorToken.Raw);
+                    Assert.Equal("c", e.Argument);
+                }
+            );
+        }
     }
 }
