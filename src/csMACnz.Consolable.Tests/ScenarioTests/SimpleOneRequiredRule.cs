@@ -21,7 +21,8 @@ namespace csMACnz.Consolable.Tests.ScenarioTests
 
             var values = Consolable.Parse(_rules, args, error => Assert.False(true, "Errors Not Expected."));
 
-            Assert.Equal(true, values["alpha"]);
+            var boolValue = Assert.IsType<bool>(values["alpha"]);
+            Assert.True(boolValue);
         }
 
         [Fact]

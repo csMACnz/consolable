@@ -1,0 +1,23 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <Product>csMACnz.Consolable</Product>
+    <AssemblyName>csMACnz.Consolable</AssemblyName>
+    <AssemblyTitle>csMACnz.Consolable</AssemblyTitle>
+    <NeutralLanguage>en-NZ</NeutralLanguage>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <Copyright>Copyright © csMACnz 2017</Copyright>
+    <Title>Consolable - An argument parser for Console Applications that fails better.</Title>
+    <Authors>dev-markc</Authors>
+    <Description>An argument parser for Console Applications that gives better guidance to the caller where their syntax errors are.</Description>
+    <PackageId>csMACnz.Consolable</PackageId>
+    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+    <PackageLicenseUrl>https://github.com/csmacnz/Consolable/blob/master/LICENSE</PackageLicenseUrl>
+    <PackageProjectUrl>https://github.com/csmacnz/Consolable</PackageProjectUrl>
+    <PackageIconUrl></PackageIconUrl>
+    <PackageTags>CLI Console Args</PackageTags>
+    <TargetFramework>netstandard1.0</TargetFramework>
+    <DebugType>full</DebugType>
+  </PropertyGroup>
+
+</Project>

@@ -1,0 +1,19 @@
+version: 0.1.{build}
+environment:
+  COVERALLS_REPO_TOKEN:
+    secure: xl65fNYNEVT93Gi8F0pRbska9Yhkohj0paYwa2Pdi0r0TZ8eqChQJV3b0s9bi7DI
+build_script:
+- ps: >-
+    dotnet restore
+
+    dotnet build -c Release Consolable.sln /property:VersionPrefix=$env:APPVEYOR_BUILD_VERSION
+
+    ./Coverage.ps1
+
+    ./Coveralls.ps1
+
+    dotnet pack -c Release -o ${pwd} .\src\csMACnz.Consolable\csMACnz.Consolable.csproj /property:VersionPrefix=$env:APPVEYOR_BUILD_VERSION
+test: off
+artifacts:
+- path: csMACnz.Consolable.*.nupkg
+  name: nuget   

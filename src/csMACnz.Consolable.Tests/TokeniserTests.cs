@@ -45,10 +45,10 @@ namespace csMACnz.Consolable.Tests
         }
         
         [Theory]
-        [InlineDataAttribute("--", 1, "-")]
-        [InlineDataAttribute("-a", 1, "a")]
-        [InlineDataAttribute("/a", 1, "a")]
-        [InlineDataAttribute("--abort", 2, "abort")]
+        [InlineData("--", 1, "-")]
+        [InlineData("-a", 1, "a")]
+        [InlineData("/a", 1, "a")]
+        [InlineData("--abort", 2, "abort")]
         public void Tokeniser_SimpleSingleArgInput_OneResult(string rawArg, int rawIndex, string parsedArg) 
         {
             var input = new string[]{rawArg};
@@ -70,19 +70,19 @@ namespace csMACnz.Consolable.Tests
         }
         
         [Theory]
-        [InlineDataAttribute("-a=value", 1, "a", 3, "value")]
-        [InlineDataAttribute("-a=key=value", 1, "a", 3, "key=value")]
-        [InlineDataAttribute("-a=key:value", 1, "a", 3, "key:value")]
-        [InlineDataAttribute("-a:value", 1, "a", 3, "value")]
-        [InlineDataAttribute("-a:key=value", 1, "a", 3, "key=value")]
-        [InlineDataAttribute("-a:key:value", 1, "a", 3, "key:value")]
-        [InlineDataAttribute("/a=value", 1, "a", 3, "value")]
-        [InlineDataAttribute("/a:value", 1, "a", 3, "value")]
-        [InlineDataAttribute("--abort=value", 2, "abort", 8, "value")]
-        [InlineDataAttribute("--abort:value", 2, "abort", 8, "value")]
-        [InlineDataAttribute("--abort:key=value", 2, "abort", 8, "key=value")]
-        [InlineDataAttribute("--abort=key:value", 2, "abort", 8, "key:value")]
-        [InlineDataAttribute("--abort=key=value", 2, "abort", 8, "key=value")]
+        [InlineData("-a=value", 1, "a", 3, "value")]
+        [InlineData("-a=key=value", 1, "a", 3, "key=value")]
+        [InlineData("-a=key:value", 1, "a", 3, "key:value")]
+        [InlineData("-a:value", 1, "a", 3, "value")]
+        [InlineData("-a:key=value", 1, "a", 3, "key=value")]
+        [InlineData("-a:key:value", 1, "a", 3, "key:value")]
+        [InlineData("/a=value", 1, "a", 3, "value")]
+        [InlineData("/a:value", 1, "a", 3, "value")]
+        [InlineData("--abort=value", 2, "abort", 8, "value")]
+        [InlineData("--abort:value", 2, "abort", 8, "value")]
+        [InlineData("--abort:key=value", 2, "abort", 8, "key=value")]
+        [InlineData("--abort=key:value", 2, "abort", 8, "key:value")]
+        [InlineData("--abort=key=value", 2, "abort", 8, "key=value")]
         [InlineDataAttribute("--abort:key:value", 2, "abort", 8, "key:value")]
         public void Tokeniser_SimpleSingleArgInput_TwoResults(string rawArg, int argIndex, string parsedArg, int valueIndex, string parsedValue) 
         {
@@ -114,8 +114,8 @@ namespace csMACnz.Consolable.Tests
 
 
         [Theory]
-        [InlineDataAttribute("-ab=value", 1, "a", 2, "b", 4, "value")]
-        public void Tokeniser_SimpleSingleArgInput_TwoResults(string rawArg, int arg1Index, string parsedArg1, int arg2Index, string parsedArg2, int valueIndex, string parsedValue) 
+        [InlineData("-ab=value", 1, "a", 2, "b", 4, "value")]
+        public void Tokeniser_SimpleSingleArgInput_ThreeResults(string rawArg, int arg1Index, string parsedArg1, int arg2Index, string parsedArg2, int valueIndex, string parsedValue) 
         {
             var input = new string[]{rawArg};
             var sut = new Tokeniser();

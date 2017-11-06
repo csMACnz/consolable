@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Xunit;
 
@@ -14,7 +15,7 @@ namespace csMACnz.Consolable.Tests
 
             var values = Consolable.Parse(rules, args, error=> Assert.False(true, "Errors Not Expected."));
             
-            Assert.Equal(true, values["help"]);
+            AssertContainsKeyWithBoolValueTrue(values, "help");
         }
 
         [Fact]
@@ -33,17 +34,24 @@ namespace csMACnz.Consolable.Tests
             };
             
             var values = Consolable.Parse(rules, args, error=> Assert.False(true, "Errors Not Expected."));
-            
-            Assert.Equal(true, values["alpha"]);
+
+            AssertContainsKeyWithBoolValueTrue(values, "alpha");
             Assert.Equal("Value", values["bravo"]);
             Assert.Collection((List<string>)values["charlie"],
                 v => Assert.Equal("Item1", v),
                 v => Assert.Equal("Item2", v)
             );
-            Assert.Equal(true, values["delta"]);
-            Assert.Equal(true, values["echo"]);
-            Assert.Equal(true, values["flag"]);
+            AssertContainsKeyWithBoolValueTrue(values, "delta");
+            AssertContainsKeyWithBoolValueTrue(values, "echo");
+            AssertContainsKeyWithBoolValueTrue(values, "flag");
             Assert.Equal("true", values["green"]);
+        }
+
+        private void AssertContainsKeyWithBoolValueTrue(Dictionary<string, object> values, string key)
+        {
+            Assert.True(values.ContainsKey(key));
+            var boolValue = Assert.IsType<bool>(values[key]);
+            Assert.True(boolValue);
         }
     }
 }

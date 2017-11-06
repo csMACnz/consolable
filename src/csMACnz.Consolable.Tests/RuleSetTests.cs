@@ -88,7 +88,7 @@ namespace csMACnz.Consolable.Tests
 
             var results = RuleSet.GetValidArguments(input);
 
-            Assert.Collection(results);
+            Assert.Empty(results);
         }
 
         [Fact]

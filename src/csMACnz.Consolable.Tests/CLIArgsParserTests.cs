@@ -26,22 +26,10 @@ namespace csMACnz.Consolable.Tests
         }
 
         [Theory]
-        [InlineData("\n")]
-        [InlineData("\r")]
-        [InlineData("b")]
-        [InlineData("blue")]
-        public void SingleValue_SingleLengthArgsArray(string input)
-        {
-            var result = CLIArgsParser.Parse(input);
-            Assert.Collection(
-                result,
-                v =>
-                {
-                    Assert.Equal(input, v);
-                });
-        }
-
-        [Theory]
+        [InlineData("\n", "\n")]
+        [InlineData("\r", "\r")]
+        [InlineData("b", "b")]
+        [InlineData("blue", "blue")]
         [InlineData("\"hello world\"", "hello world")]
         [InlineData("\r ", "\r")]
         [InlineData(" \r", "\r")]

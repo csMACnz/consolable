@@ -123,7 +123,7 @@ namespace csMACnz.Consolable.Tests.ValidatorTests
                     Assert.Equal("blue", e.ErrorToken.Value);
                     Assert.Equal(0, e.ErrorToken.RawIndex);
                     Assert.Equal("blue", e.ErrorToken.Raw);
-                    Assert.Equal(null, e.Argument);
+                    Assert.Null(e.Argument);
                 }
             );
         }

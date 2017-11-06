@@ -15,7 +15,9 @@ namespace csMACnz.Consolable.Tests
             Assert.NotNull(values);
             Assert.NotEmpty(values);
             Assert.True(values.ContainsKey("alpha"));
-            Assert.Equal(true, values["alpha"]);
+            
+            var boolValue = Assert.IsType<bool>(values["alpha"]);
+            Assert.True(boolValue);
         }
     }
 }
