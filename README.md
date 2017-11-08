@@ -4,6 +4,7 @@
 [![License](http://img.shields.io/:license-mit-blue.svg)](http://csmacnz.mit-license.org)
 [![Gratipay](http://img.shields.io/gratipay/csMACnz.svg)](https://gratipay.com/csMACnz/)
 [![Build status](https://ci.appveyor.com/api/projects/status/14cmqsqogo24lju7?svg=true)](https://ci.appveyor.com/project/MarkClearwater/consolable)
+[![Coverage Status](https://coveralls.io/repos/github/csMACnz/consolable/badge.svg?branch=master)](https://coveralls.io/github/csMACnz/consolable?branch=master)
 [![Issue Stats](http://www.issuestats.com/github/csMACnz/consolable/badge/pr)](http://www.issuestats.com/github/csMACnz/consolable)
 [![Issue Stats](http://www.issuestats.com/github/csMACnz/consolable/badge/issue)](http://www.issuestats.com/github/csMACnz/consolable)
 
