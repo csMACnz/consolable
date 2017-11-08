@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using Xunit;
 
 namespace csMACnz.Consolable.Tests
@@ -8,7 +9,7 @@ namespace csMACnz.Consolable.Tests
         [Fact]
         public void Tokeniser_EmptyInput_EmptyOutput() 
         {
-            var input = new string[0];
+            var input = Array.Empty<string>();
             var sut = new Tokeniser();
 
             var result = sut.GetTokens(input);

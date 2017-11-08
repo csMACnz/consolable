@@ -1,11 +1,11 @@
-using Xunit;
+﻿using Xunit;
 
 namespace csMACnz.Consolable.Tests.ScenarioTests
 {
-    public class SimpleOneRequiredRule
+    public class SimpleOneRequiredArgumentRule
     {
         private IRule[] _rules;
-        public SimpleOneRequiredRule()
+        public SimpleOneRequiredArgumentRule()
         {
             _rules = new IRule[] { new RequiredArgument('a', "alpha") };
         }
@@ -19,7 +19,7 @@ namespace csMACnz.Consolable.Tests.ScenarioTests
             //Simulate .Net args parsing
             var args = CLIArgsParser.Parse(arg);
 
-            var values = Consolable.Parse(_rules, args, error => Assert.False(true, "Errors Not Expected."));
+            var values = CommandLineParser.Parse(_rules, args, error => Assert.False(true, "Errors Not Expected."));
 
             var boolValue = Assert.IsType<bool>(values["alpha"]);
             Assert.True(boolValue);
@@ -32,7 +32,7 @@ namespace csMACnz.Consolable.Tests.ScenarioTests
             var args = CLIArgsParser.Parse("");
 
             bool errorWasCalled = false;
-            var values = Consolable.Parse(
+            var values = CommandLineParser.Parse(
                 _rules,
                 args,
                 errors =>
@@ -40,7 +40,7 @@ namespace csMACnz.Consolable.Tests.ScenarioTests
                     errorWasCalled = true;
                     Assert.Collection(
                         errors,
-                        e => Assert.Equal(ErrorType.RequiredArgMissing, e.Type));
+                        e => Assert.Equal(ErrorType.RequiredArgMissing, e.ErrorType));
                 });
 
             Assert.True(errorWasCalled);
@@ -56,7 +56,7 @@ namespace csMACnz.Consolable.Tests.ScenarioTests
             var args = CLIArgsParser.Parse(arg);
 
             bool errorWasCalled = false;
-            var values = Consolable.Parse(
+            var values = CommandLineParser.Parse(
                 _rules,
                 args,
                 errors =>
@@ -64,8 +64,8 @@ namespace csMACnz.Consolable.Tests.ScenarioTests
                     errorWasCalled = true;
                     Assert.Collection(
                             errors,
-                            e => Assert.Equal(ErrorType.UnknownArgument, e.Type),
-                            e => Assert.Equal(ErrorType.RequiredArgMissing, e.Type));
+                            e => Assert.Equal(ErrorType.UnknownArgument, e.ErrorType),
+                            e => Assert.Equal(ErrorType.RequiredArgMissing, e.ErrorType));
                 });
 
             Assert.True(errorWasCalled);

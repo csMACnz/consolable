@@ -1,11 +1,11 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 
 namespace csMACnz.Consolable
 {
     public static class Validator
     {
-        public static IEnumerable<Error> ValidateArguments(IEnumerable<IRule> rules, IEnumerable<Token> tokens)
+        public static IEnumerable<ParseError> ValidateArguments(IEnumerable<IRule> rules, IEnumerable<Token> tokens)
         {
             var arguments = RuleSet.GetValidArguments(rules);
 
@@ -20,9 +20,9 @@ namespace csMACnz.Consolable
                 {
                     if (providedArguments.Any(a => ArgMatchesToken(a, token)))
                     {
-                        yield return new Error
+                        yield return new ParseError
                         {
-                            Type = ErrorType.DuplicateArg,
+                            ErrorType = ErrorType.DuplicateArg,
                             ErrorToken = token,
                             Argument = token.Value
                         };
@@ -31,9 +31,9 @@ namespace csMACnz.Consolable
                     {
                         if (lastToken == lastArgToken && (lastArg.ValueMode == ArgumentMode.SingleValue || lastArg.ValueMode == ArgumentMode.MultiValue))
                         {
-                            yield return new Error
+                            yield return new ParseError
                             {
-                                Type = ErrorType.MissingValue,
+                                ErrorType = ErrorType.MissingValue,
                                 ErrorToken = lastArgToken,
                                 Argument = lastArgToken.Value
                             };
@@ -44,9 +44,9 @@ namespace csMACnz.Consolable
                     lastArg = arguments.SingleOrDefault(a => ArgMatchesToken(a, token));
                     if (lastArg == null)
                     {
-                        yield return new Error
+                        yield return new ParseError
                         {
-                            Type = ErrorType.UnknownArgument,
+                            ErrorType = ErrorType.UnknownArgument,
                             ErrorToken = token,
                             Argument = token.Value
                         };
@@ -67,9 +67,9 @@ namespace csMACnz.Consolable
                             {
                                 if (lastArg.ValueMode == ArgumentMode.Flag)
                                 {
-                                    yield return new Error
+                                    yield return new ParseError
                                     {
-                                        Type = ErrorType.UnexpectedArgValue,
+                                        ErrorType = ErrorType.UnexpectedArgValue,
                                         ErrorToken = token,
                                         Argument = lastArgToken.Value
                                     };
@@ -79,9 +79,9 @@ namespace csMACnz.Consolable
                     }
                     else
                     {
-                        yield return new Error
+                        yield return new ParseError
                         {
-                            Type = ErrorType.UnexpectedStartPositionalValue,
+                            ErrorType = ErrorType.UnexpectedStartPositionalValue,
                             ErrorToken = token,
                             Argument = null
                         };
@@ -95,9 +95,9 @@ namespace csMACnz.Consolable
                 {
                     if (lastArg.ValueMode == ArgumentMode.SingleValue || lastArg.ValueMode == ArgumentMode.MultiValue)
                     {
-                        yield return new Error
+                        yield return new ParseError
                         {
-                            Type = ErrorType.MissingValue,
+                            ErrorType = ErrorType.MissingValue,
                             ErrorToken = lastArgToken,
                             Argument = lastArgToken.Value
                         };
@@ -120,9 +120,9 @@ namespace csMACnz.Consolable
         }
     }
 
-    public class Error
+    public class ParseError
     {
-        public ErrorType Type { get; set; }
+        public ErrorType ErrorType { get; set; }
         public Token ErrorToken { get; set; }
         public string Argument { get; set; }
     }

@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 
 namespace csMACnz.Consolable
@@ -33,22 +33,22 @@ namespace csMACnz.Consolable
             };
         }
 
-        public IEnumerable<Error> ValidateArguments(List<Argument> providedArguments)
+        public IEnumerable<ParseError> ValidateArguments(List<Argument> providedArguments)
         {
-            if (!providedArguments.Any(a => this.LongName == a.LongName))
+            if (!providedArguments.Any(a => LongName == a.LongName))
             {
-                yield return new Error
+                yield return new ParseError
                 {
-                    Type = ErrorType.RequiredArgMissing,
+                    ErrorType = ErrorType.RequiredArgMissing,
                     ErrorToken = null,
-                    Argument = this.LongName
+                    Argument = LongName
                 };
             }
         }
 
         public VerifyMode Verify(List<Argument> providedArguments)
         {
-            if (providedArguments.Any(a => this.LongName == a.LongName))
+            if (providedArguments.Any(a => LongName == a.LongName))
             {
                 return VerifyMode.ExplicitlyProvided;
             }

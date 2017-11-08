@@ -29,7 +29,7 @@ namespace csMACnz.Consolable.Tests.ValidatorTests
                 e =>
                 {
                     Assert.NotNull(e);
-                    Assert.Equal(ErrorType.UnexpectedArgValue, e.Type);
+                    Assert.Equal(ErrorType.UnexpectedArgValue, e.ErrorType);
                     Assert.Equal("hello", e.ErrorToken.Value);
                     Assert.Equal(0, e.ErrorToken.RawIndex);
                     Assert.Equal("hello", e.ErrorToken.Raw);

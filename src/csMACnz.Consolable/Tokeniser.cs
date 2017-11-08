@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace csMACnz.Consolable
@@ -16,7 +17,7 @@ namespace csMACnz.Consolable
             bool isMultiArg = false;
             int index = 0;
             bool remainderIsValue = true;
-            if(arg.StartsWith("--"))
+            if(arg.StartsWith("--", StringComparison.Ordinal))
             {
                 isArg=true;
                 isMultiArg = false;
@@ -29,7 +30,7 @@ namespace csMACnz.Consolable
                     index = 2;
                 }
             }
-            else if(arg.StartsWith("-") || arg.StartsWith("/"))
+            else if(arg.StartsWith("-", StringComparison.Ordinal) || arg.StartsWith("/", StringComparison.Ordinal))
             {
                 isArg=true;
                 isMultiArg = true;
@@ -44,12 +45,12 @@ namespace csMACnz.Consolable
                 if(arg.Contains("="))
                 {
                     hasSplitPoint = true;
-                    splitIndex = System.Math.Min(splitIndex, arg.IndexOf("="));
+                    splitIndex = System.Math.Min(splitIndex, arg.IndexOf("=", StringComparison.Ordinal));
                 }
                 if(arg.Contains(":"))
                 {
                     hasSplitPoint = true;
-                    splitIndex = System.Math.Min(splitIndex, arg.IndexOf(":"));
+                    splitIndex = System.Math.Min(splitIndex, arg.IndexOf(":", StringComparison.Ordinal));
                 }
 
                 string argString;

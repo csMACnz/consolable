@@ -13,7 +13,7 @@ namespace csMACnz.Consolable.Tests
             var args = CLIArgsParser.Parse("-?");
             var rules = new IRule[] { new RequiredArgument('?', "help") };
 
-            var values = Consolable.Parse(rules, args, error=> Assert.False(true, "Errors Not Expected."));
+            var values = CommandLineParser.Parse(rules, args, error=> Assert.False(true, "Errors Not Expected."));
             
             AssertContainsKeyWithBoolValueTrue(values, "help");
         }
@@ -33,7 +33,7 @@ namespace csMACnz.Consolable.Tests
                  new RequiredArgument('g', "green", ArgumentMode.SingleValue),//Investigate if this should be flag feature (allow boolean value)
             };
             
-            var values = Consolable.Parse(rules, args, error=> Assert.False(true, "Errors Not Expected."));
+            var values = CommandLineParser.Parse(rules, args, error=> Assert.False(true, "Errors Not Expected."));
 
             AssertContainsKeyWithBoolValueTrue(values, "alpha");
             Assert.Equal("Value", values["bravo"]);

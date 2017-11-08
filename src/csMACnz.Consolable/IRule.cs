@@ -6,7 +6,7 @@ namespace csMACnz.Consolable
     {
         IEnumerable<Argument> GetArguments();
         VerifyMode Verify(List<Argument> providedArguments);
-        IEnumerable<Error> ValidateArguments(List<Argument> providedArguments);
+        IEnumerable<ParseError> ValidateArguments(List<Argument> providedArguments);
     }
 
     public enum VerifyMode

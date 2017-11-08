@@ -131,9 +131,9 @@ namespace csMACnz.Consolable.Tests
                 return Enumerable.Empty<Argument>();
             }
 
-            public IEnumerable<Error> ValidateArguments(List<Argument> providedArguments)
+            public IEnumerable<ParseError> ValidateArguments(List<Argument> providedArguments)
             {
-                return Enumerable.Empty<Error>();
+                return Enumerable.Empty<ParseError>();
             }
 
             public VerifyMode Verify(List<Argument> providedArguments)
@@ -149,9 +149,9 @@ namespace csMACnz.Consolable.Tests
                 return new[] { new Argument { ShortName = 'a', LongName = "alpha", ValueMode = ArgumentMode.Flag } };
             }
 
-            public IEnumerable<Error> ValidateArguments(List<Argument> providedArguments)
+            public IEnumerable<ParseError> ValidateArguments(List<Argument> providedArguments)
             {
-                return Enumerable.Empty<Error>();
+                return Enumerable.Empty<ParseError>();
             }
 
             public VerifyMode Verify(List<Argument> providedArguments)
@@ -171,9 +171,9 @@ namespace csMACnz.Consolable.Tests
                 };
             }
 
-            public IEnumerable<Error> ValidateArguments(List<Argument> providedArguments)
+            public IEnumerable<ParseError> ValidateArguments(List<Argument> providedArguments)
             {
-                return Enumerable.Empty<Error>();
+                return Enumerable.Empty<ParseError>();
             }
 
             public VerifyMode Verify(List<Argument> providedArguments)

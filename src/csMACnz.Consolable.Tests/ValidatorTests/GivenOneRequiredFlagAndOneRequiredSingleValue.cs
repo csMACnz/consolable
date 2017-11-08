@@ -25,7 +25,7 @@ namespace csMACnz.Consolable.Tests.ValidatorTests
                 e =>
                 {
                     Assert.NotNull(e);
-                    Assert.Equal(ErrorType.MissingValue, e.Type);
+                    Assert.Equal(ErrorType.MissingValue, e.ErrorType);
                     Assert.Equal("b", e.ErrorToken.Value);
                     Assert.Equal(1, e.ErrorToken.RawIndex);
                     Assert.Equal("-b", e.ErrorToken.Raw);
@@ -46,7 +46,7 @@ namespace csMACnz.Consolable.Tests.ValidatorTests
                 e =>
                 {
                     Assert.NotNull(e);
-                    Assert.Equal(ErrorType.MissingValue, e.Type);
+                    Assert.Equal(ErrorType.MissingValue, e.ErrorType);
                     Assert.Equal("b", e.ErrorToken.Value);
                     Assert.Equal(1, e.ErrorToken.RawIndex);
                     Assert.Equal("-b", e.ErrorToken.Raw);
