@@ -27,18 +27,17 @@ namespace csMACnz.Consolable
                             Argument = token.Value
                         };
                     }
-                    if (lastArg != null)
+
+                    if (lastArg != null && lastToken == lastArgToken && (lastArg.ValueMode == ArgumentMode.SingleValue || lastArg.ValueMode == ArgumentMode.MultiValue))
                     {
-                        if (lastToken == lastArgToken && (lastArg.ValueMode == ArgumentMode.SingleValue || lastArg.ValueMode == ArgumentMode.MultiValue))
+                        yield return new ParseError
                         {
-                            yield return new ParseError
-                            {
-                                ErrorType = ErrorType.MissingValue,
-                                ErrorToken = lastArgToken,
-                                Argument = lastArgToken.Value
-                            };
-                        }
+                            ErrorType = ErrorType.MissingValue,
+                            ErrorToken = lastArgToken,
+                            Argument = lastArgToken.Value
+                        };
                     }
+
                     lastArgToken = token;
                     lastArgValueToken = null;
                     lastArg = arguments.SingleOrDefault(a => ArgMatchesToken(a, token));
@@ -55,26 +54,19 @@ namespace csMACnz.Consolable
                     {
                         providedArguments.Add(lastArg);
                     }
-
                 }
                 else if (token.TokenType == TokenType.Value)
                 {
                     if (lastArgToken != null)
                     {
-                        if (lastArg != null)
+                        if (lastArg != null && lastArgValueToken == null && lastArg.ValueMode == ArgumentMode.Flag)
                         {
-                            if (lastArgValueToken == null)
+                            yield return new ParseError
                             {
-                                if (lastArg.ValueMode == ArgumentMode.Flag)
-                                {
-                                    yield return new ParseError
-                                    {
-                                        ErrorType = ErrorType.UnexpectedArgValue,
-                                        ErrorToken = token,
-                                        Argument = lastArgToken.Value
-                                    };
-                                }
-                            }
+                                ErrorType = ErrorType.UnexpectedArgValue,
+                                ErrorToken = token,
+                                Argument = lastArgToken.Value
+                            };
                         }
                     }
                     else
@@ -87,22 +79,18 @@ namespace csMACnz.Consolable
                         };
                     }
                 }
+
                 lastToken = token;
             }
-            if (lastToken != null && lastToken.TokenType == TokenType.Arg)
+
+            if (lastToken != null && lastToken.TokenType == TokenType.Arg && lastArg != null && (lastArg.ValueMode == ArgumentMode.SingleValue || lastArg.ValueMode == ArgumentMode.MultiValue))
             {
-                if (lastArg != null)
+                yield return new ParseError
                 {
-                    if (lastArg.ValueMode == ArgumentMode.SingleValue || lastArg.ValueMode == ArgumentMode.MultiValue)
-                    {
-                        yield return new ParseError
-                        {
-                            ErrorType = ErrorType.MissingValue,
-                            ErrorToken = lastArgToken,
-                            Argument = lastArgToken.Value
-                        };
-                    }
-                }
+                    ErrorType = ErrorType.MissingValue,
+                    ErrorToken = lastArgToken,
+                    Argument = lastArgToken.Value
+                };
             }
 
             foreach (var rule in rules)
@@ -116,24 +104,7 @@ namespace csMACnz.Consolable
 
         private static bool ArgMatchesToken(Argument argument, Token token)
         {
-            return argument.LongName == token.Value || argument.ShortName + "" == token.Value;
+            return argument.LongName == token.Value || argument.ShortName.ToString() == token.Value;
         }
-    }
-
-    public class ParseError
-    {
-        public ErrorType ErrorType { get; set; }
-        public Token ErrorToken { get; set; }
-        public string Argument { get; set; }
-    }
-
-    public enum ErrorType
-    {
-        UnknownArgument,
-        UnexpectedArgValue,
-        UnexpectedStartPositionalValue,
-        MissingValue,
-        RequiredArgMissing,
-        DuplicateArg
     }
 }

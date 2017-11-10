@@ -32,8 +32,7 @@ namespace csMACnz.Consolable.Tests
                     Assert.Equal('a', e.ShortName);
                     Assert.Equal("alpha", e.LongName);
                     Assert.Equal(ArgumentMode.Flag, e.ValueMode);
-                }
-            );
+                });
         }
 
         [Fact]
@@ -58,8 +57,7 @@ namespace csMACnz.Consolable.Tests
                     Assert.Equal('b', e.ShortName);
                     Assert.Equal("bravo", e.LongName);
                     Assert.Equal(ArgumentMode.Flag, e.ValueMode);
-                }
-            );
+                });
         }
 
         [Fact]
@@ -77,8 +75,7 @@ namespace csMACnz.Consolable.Tests
                     Assert.Equal('a', e.ShortName);
                     Assert.Equal("alpha", e.LongName);
                     Assert.Equal(ArgumentMode.Flag, e.ValueMode);
-                }
-            );
+                });
         }
 
         [Fact]
@@ -120,8 +117,7 @@ namespace csMACnz.Consolable.Tests
                     Assert.Equal('c', e.ShortName);
                     Assert.Equal("charlie", e.LongName);
                     Assert.Equal(ArgumentMode.Flag, e.ValueMode);
-                }
-            );
+                });
         }
 
         private class NoArgumentsTestRule : IRule
@@ -164,7 +160,8 @@ namespace csMACnz.Consolable.Tests
         {
             public IEnumerable<Argument> GetArguments()
             {
-                return new[] {
+                return new[]
+                {
                     new Argument { ShortName = 'a', LongName = "alpha", ValueMode = ArgumentMode.Flag },
                     new Argument { ShortName = 'b', LongName = "bravo", ValueMode = ArgumentMode.Flag },
                     new Argument { ShortName = 'c', LongName = "charlie", ValueMode = ArgumentMode.Flag }

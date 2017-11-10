@@ -1,11 +1,12 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 
 namespace csMACnz.Consolable
 {
     public class ValueParser
     {
-        private IRule[] _rules;
+        private readonly IRule[] _rules;
+
         public ValueParser(IRule[] rules)
         {
             _rules = rules;
@@ -19,21 +20,27 @@ namespace csMACnz.Consolable
             {
                 results[argument.LongName] = DefaultValue(argument);
             }
+
             Argument lastArg = null;
             foreach (var token in tokens)
             {
                 switch (token.TokenType)
                 {
                     case TokenType.Arg:
-                        lastArg = arguments.SingleOrDefault(a => a.LongName == token.Value || a.ShortName + "" == token.Value);
+                        lastArg = arguments.SingleOrDefault(a => a.LongName == token.Value || a.ShortName.ToString() == token.Value);
                         if (lastArg.ValueMode == ArgumentMode.Flag)
                         {
                             results[lastArg.LongName] = true;
                             break;
                         }
+
                         break;
                     case TokenType.Value:
-                        if (lastArg.ValueMode == ArgumentMode.MultiValue)
+                        if (lastArg is null)
+                        {
+                            // TODO: what to do with positional args?
+                        }
+                        else if (lastArg.ValueMode == ArgumentMode.MultiValue)
                         {
                             ((List<string>)results[lastArg.LongName]).Add(token.Value);
                         }
@@ -41,13 +48,15 @@ namespace csMACnz.Consolable
                         {
                             results[lastArg.LongName] = token.Value;
                         }
+
                         break;
                 }
             }
+
             return results;
         }
 
-        private object DefaultValue(Argument argument)
+        private static object DefaultValue(Argument argument)
         {
             switch (argument.ValueMode)
             {

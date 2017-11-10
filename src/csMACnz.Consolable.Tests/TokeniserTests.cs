@@ -7,12 +7,11 @@ namespace csMACnz.Consolable.Tests
     public class TokeniserTests
     {
         [Fact]
-        public void Tokeniser_EmptyInput_EmptyOutput() 
+        public void Tokeniser_EmptyInput_EmptyOutput()
         {
             var input = Array.Empty<string>();
-            var sut = new Tokeniser();
 
-            var result = sut.GetTokens(input);
+            var result = Tokeniser.GetTokens(input);
 
             Assert.NotNull(result);
             Assert.Empty(result);
@@ -25,17 +24,16 @@ namespace csMACnz.Consolable.Tests
         [InlineData("key:value")]
         [InlineData("key=value")]
         [InlineData("key value")]
-        public void Tokeniser_SimpleSingleValueInput_OneResult(string value) 
+        public void Tokeniser_SimpleSingleValueInput_OneResult(string value)
         {
-            var input = new string[]{value};
-            var sut = new Tokeniser();
+            var input = new string[] { value };
 
-            var result = sut.GetTokens(input).ToList();
+            var result = Tokeniser.GetTokens(input).ToList();
 
             Assert.NotNull(result);
             Assert.Collection(
                 result,
-                t=> 
+                t =>
                 {
                     Assert.NotNull(t);
                     Assert.Equal(TokenType.Value, t.TokenType);
@@ -44,23 +42,22 @@ namespace csMACnz.Consolable.Tests
                     Assert.Equal(0, t.RawIndex);
                 });
         }
-        
+
         [Theory]
         [InlineData("--", 1, "-")]
         [InlineData("-a", 1, "a")]
         [InlineData("/a", 1, "a")]
         [InlineData("--abort", 2, "abort")]
-        public void Tokeniser_SimpleSingleArgInput_OneResult(string rawArg, int rawIndex, string parsedArg) 
+        public void Tokeniser_SimpleSingleArgInput_OneResult(string rawArg, int rawIndex, string parsedArg)
         {
-            var input = new string[]{rawArg};
-            var sut = new Tokeniser();
+            var input = new string[] { rawArg };
 
-            var result = sut.GetTokens(input).ToList();
+            var result = Tokeniser.GetTokens(input).ToList();
 
             Assert.NotNull(result);
             Assert.Collection(
                 result,
-                t=> 
+                t =>
                 {
                     Assert.NotNull(t);
                     Assert.Equal(TokenType.Arg, t.TokenType);
@@ -69,7 +66,7 @@ namespace csMACnz.Consolable.Tests
                     Assert.Equal(rawIndex, t.RawIndex);
                 });
         }
-        
+
         [Theory]
         [InlineData("-a=value", 1, "a", 3, "value")]
         [InlineData("-a=key=value", 1, "a", 3, "key=value")]
@@ -85,17 +82,16 @@ namespace csMACnz.Consolable.Tests
         [InlineData("--abort=key:value", 2, "abort", 8, "key:value")]
         [InlineData("--abort=key=value", 2, "abort", 8, "key=value")]
         [InlineDataAttribute("--abort:key:value", 2, "abort", 8, "key:value")]
-        public void Tokeniser_SimpleSingleArgInput_TwoResults(string rawArg, int argIndex, string parsedArg, int valueIndex, string parsedValue) 
+        public void Tokeniser_SimpleSingleArgInput_TwoResults(string rawArg, int argIndex, string parsedArg, int valueIndex, string parsedValue)
         {
-            var input = new string[]{rawArg};
-            var sut = new Tokeniser();
+            var input = new string[] { rawArg };
 
-            var result = sut.GetTokens(input).ToList();
+            var result = Tokeniser.GetTokens(input).ToList();
 
             Assert.NotNull(result);
             Assert.Collection(
                 result,
-                t=> 
+                t =>
                 {
                     Assert.NotNull(t);
                     Assert.Equal(TokenType.Arg, t.TokenType);
@@ -103,7 +99,7 @@ namespace csMACnz.Consolable.Tests
                     Assert.Equal(rawArg, t.Raw);
                     Assert.Equal(argIndex, t.RawIndex);
                 },
-                t=> 
+                t =>
                 {
                     Assert.NotNull(t);
                     Assert.Equal(TokenType.Value, t.TokenType);
@@ -113,20 +109,18 @@ namespace csMACnz.Consolable.Tests
                 });
         }
 
-
         [Theory]
         [InlineData("-ab=value", 1, "a", 2, "b", 4, "value")]
-        public void Tokeniser_SimpleSingleArgInput_ThreeResults(string rawArg, int arg1Index, string parsedArg1, int arg2Index, string parsedArg2, int valueIndex, string parsedValue) 
+        public void Tokeniser_SimpleSingleArgInput_ThreeResults(string rawArg, int arg1Index, string parsedArg1, int arg2Index, string parsedArg2, int valueIndex, string parsedValue)
         {
-            var input = new string[]{rawArg};
-            var sut = new Tokeniser();
+            var input = new string[] { rawArg };
 
-            var result = sut.GetTokens(input).ToList();
+            var result = Tokeniser.GetTokens(input).ToList();
 
             Assert.NotNull(result);
             Assert.Collection(
                 result,
-                t=> 
+                t =>
                 {
                     Assert.NotNull(t);
                     Assert.Equal(TokenType.Arg, t.TokenType);
@@ -134,7 +128,7 @@ namespace csMACnz.Consolable.Tests
                     Assert.Equal(rawArg, t.Raw);
                     Assert.Equal(arg1Index, t.RawIndex);
                 },
-                t=> 
+                t =>
                 {
                     Assert.NotNull(t);
                     Assert.Equal(TokenType.Arg, t.TokenType);
@@ -142,7 +136,7 @@ namespace csMACnz.Consolable.Tests
                     Assert.Equal(rawArg, t.Raw);
                     Assert.Equal(arg2Index, t.RawIndex);
                 },
-                t=> 
+                t =>
                 {
                     Assert.NotNull(t);
                     Assert.Equal(TokenType.Value, t.TokenType);

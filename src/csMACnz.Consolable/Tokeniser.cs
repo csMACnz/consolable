@@ -4,50 +4,45 @@ using System.Linq;
 
 namespace csMACnz.Consolable
 {
-    public class Tokeniser
+    public static class Tokeniser
     {
-        public IEnumerable<Token> GetTokens(string[] args)
-        {    
+        public static IEnumerable<Token> GetTokens(string[] args)
+        {
             return args.SelectMany(Split);
         }
 
-        private IEnumerable<Token> Split(string arg)
+        private static IEnumerable<Token> Split(string arg)
         {
             bool isArg = false;
             bool isMultiArg = false;
             int index = 0;
             bool remainderIsValue = true;
-            if(arg.StartsWith("--", StringComparison.Ordinal))
+            if (arg.StartsWith("--", StringComparison.Ordinal))
             {
-                isArg=true;
+                isArg = true;
                 isMultiArg = false;
-                if(arg.Length == 2)
-                {
-                    index = 1;
-                }
-                else
-                {
-                    index = 2;
-                }
+                index = arg.Length == 2 ? 1 : 2;
             }
-            else if(arg.StartsWith("-", StringComparison.Ordinal) || arg.StartsWith("/", StringComparison.Ordinal))
+            else if (arg.StartsWith("-", StringComparison.Ordinal) || arg.StartsWith("/", StringComparison.Ordinal))
             {
-                isArg=true;
+                isArg = true;
                 isMultiArg = true;
                 index = 1;
             }
 
-            if(isArg){
+            if (isArg)
+            {
                 remainderIsValue = false;
                 bool hasSplitPoint = false;
                 int splitIndex = int.MaxValue;
-                
-                if(arg.Contains("="))
+
+                if (arg.Contains("="))
                 {
                     hasSplitPoint = true;
                     splitIndex = System.Math.Min(splitIndex, arg.IndexOf("=", StringComparison.Ordinal));
                 }
-                if(arg.Contains(":"))
+
+                if (arg.Contains(":"))
                 {
                     hasSplitPoint = true;
                     splitIndex = System.Math.Min(splitIndex, arg.IndexOf(":", StringComparison.Ordinal));
@@ -55,10 +50,10 @@ namespace csMACnz.Consolable
 
                 string argString;
                 int rawIndex = index;
-                if(hasSplitPoint)
+                if (hasSplitPoint)
                 {
-                    argString = arg.Substring(index, splitIndex-index);
-                    index=splitIndex + 1;
+                    argString = arg.Substring(index, splitIndex - index);
+                    index = splitIndex + 1;
                     remainderIsValue = true;
                 }
                 else
@@ -66,12 +61,12 @@ namespace csMACnz.Consolable
                     argString = arg.Substring(index);
                 }
 
-                if(isMultiArg)
+                if (isMultiArg)
                 {
-                    foreach(int i in Enumerable.Range(0, argString.Length))
+                    foreach (int i in Enumerable.Range(0, argString.Length))
                     {
                         char c = argString[i];
-                        yield return new Token(TokenType.Arg, c.ToString(), arg, rawIndex+i);
+                        yield return new Token(TokenType.Arg, c.ToString(), arg, rawIndex + i);
                     }
                 }
                 else
@@ -80,31 +75,10 @@ namespace csMACnz.Consolable
                 }
             }
 
-            if(remainderIsValue)
+            if (remainderIsValue)
             {
                 yield return new Token(TokenType.Value, arg.Substring(index), arg, index);
             }
         }
-    }
-
-    public class Token
-    {
-        public Token(TokenType type, string value, string raw, int rawIndex)
-        {
-            TokenType = type;
-            Value = value;
-            Raw = raw;
-            RawIndex = rawIndex;
-        }
-        public TokenType TokenType { get; }
-        public string Value { get; }
-        public string Raw { get; }
-        public int RawIndex { get; }
-     }
-
-    public enum TokenType
-    {
-        Value,
-        Arg
     }
 }

@@ -1,10 +1,11 @@
-using Xunit;
+﻿using Xunit;
 
 namespace csMACnz.Consolable.Tests.ValidatorTests
 {
     public class GivenASingleRequiredSingleValueArg
     {
-        private IRule[] _rules;
+        private readonly IRule[] _rules;
+
         public GivenASingleRequiredSingleValueArg()
         {
             _rules = new IRule[] { new RequiredArgument('a', "alpha", ArgumentMode.SingleValue) };
@@ -13,7 +14,8 @@ namespace csMACnz.Consolable.Tests.ValidatorTests
         [Fact]
         public void ValidateArguments_ExpectedValueToken_NoErrors()
         {
-            var input = new[] {
+            var input = new[]
+            {
                 new Token(TokenType.Arg, "a", "-a", 1),
                 new Token(TokenType.Value, "hello", "hello", 0)
             };
@@ -26,7 +28,8 @@ namespace csMACnz.Consolable.Tests.ValidatorTests
         [Fact]
         public void ValidateArguments_TwoExpectedValueTokens_NoErrors()
         {
-            var input = new[] {
+            var input = new[]
+            {
                 new Token(TokenType.Arg, "a", "-a", 1),
                 new Token(TokenType.Value, "hello", "hello", 0),
                 new Token(TokenType.Value, "world", "world", 0)
@@ -54,9 +57,7 @@ namespace csMACnz.Consolable.Tests.ValidatorTests
                     Assert.Equal(1, e.ErrorToken.RawIndex);
                     Assert.Equal("-a", e.ErrorToken.Raw);
                     Assert.Equal("a", e.Argument);
-                }
-            );
+                });
         }
-
     }
 }

@@ -1,13 +1,15 @@
-using Xunit;
+﻿using Xunit;
 
 namespace csMACnz.Consolable.Tests.ValidatorTests
 {
     public class GivenOneRequiredFlagAndOneRequiredSingleValue
     {
-        private IRule[] _rules;
+        private readonly IRule[] _rules;
+
         public GivenOneRequiredFlagAndOneRequiredSingleValue()
         {
-            _rules = new IRule[] {
+            _rules = new IRule[]
+            {
                 new RequiredArgument('a', "alpha", ArgumentMode.Flag),
                 new RequiredArgument('b', "bravo", ArgumentMode.SingleValue)
             };
@@ -30,8 +32,7 @@ namespace csMACnz.Consolable.Tests.ValidatorTests
                     Assert.Equal(1, e.ErrorToken.RawIndex);
                     Assert.Equal("-b", e.ErrorToken.Raw);
                     Assert.Equal("b", e.Argument);
-                }
-            );
+                });
         }
 
         [Fact]
@@ -51,9 +52,7 @@ namespace csMACnz.Consolable.Tests.ValidatorTests
                     Assert.Equal(1, e.ErrorToken.RawIndex);
                     Assert.Equal("-b", e.ErrorToken.Raw);
                     Assert.Equal("b", e.Argument);
-                }
-            );
+                });
         }
-
     }
 }

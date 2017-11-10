@@ -1,13 +1,15 @@
-using Xunit;
+﻿using Xunit;
 
 namespace csMACnz.Consolable.Tests.ValidatorTests
 {
     public class GivenTwoRequiredFlagRules
     {
-        private IRule[] _rules;
+        private readonly IRule[] _rules;
+
         public GivenTwoRequiredFlagRules()
         {
-            _rules = new IRule[] {
+            _rules = new IRule[]
+            {
                 new RequiredArgument('a', "alpha"),
                 new RequiredArgument('b', "bravo")
             };
@@ -16,7 +18,8 @@ namespace csMACnz.Consolable.Tests.ValidatorTests
         [Fact]
         public void ValidateArguments_UnexpectedValueTokenThenValidArgument_OneError()
         {
-            var input = new[] {
+            var input = new[]
+            {
                 new Token(TokenType.Arg, "a", "-a", 1),
                 new Token(TokenType.Value, "hello", "hello", 0),
                 new Token(TokenType.Arg, "b", "-b", 1)
@@ -34,9 +37,7 @@ namespace csMACnz.Consolable.Tests.ValidatorTests
                     Assert.Equal(0, e.ErrorToken.RawIndex);
                     Assert.Equal("hello", e.ErrorToken.Raw);
                     Assert.Equal("a", e.Argument);
-                }
-            );
+                });
         }
-
     }
 }

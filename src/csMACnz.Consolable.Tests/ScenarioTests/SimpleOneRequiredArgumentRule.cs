@@ -4,7 +4,8 @@ namespace csMACnz.Consolable.Tests.ScenarioTests
 {
     public class SimpleOneRequiredArgumentRule
     {
-        private IRule[] _rules;
+        private readonly IRule[] _rules;
+
         public SimpleOneRequiredArgumentRule()
         {
             _rules = new IRule[] { new RequiredArgument('a', "alpha") };
@@ -16,8 +17,8 @@ namespace csMACnz.Consolable.Tests.ScenarioTests
         [InlineData("--alpha")]
         public void ValidArgumentPasses(string arg)
         {
-            //Simulate .Net args parsing
-            var args = CLIArgsParser.Parse(arg);
+            // Simulate .Net args parsing
+            var args = ShellArgsParser.Parse(arg);
 
             var values = CommandLineParser.Parse(_rules, args, error => Assert.False(true, "Errors Not Expected."));
 
@@ -28,8 +29,8 @@ namespace csMACnz.Consolable.Tests.ScenarioTests
         [Fact]
         public void EmptyArguments_ErrorResult()
         {
-            //Simulate .Net args parsing
-            var args = CLIArgsParser.Parse("");
+            // Simulate .Net args parsing
+            var args = ShellArgsParser.Parse(string.Empty);
 
             bool errorWasCalled = false;
             var values = CommandLineParser.Parse(
@@ -44,6 +45,8 @@ namespace csMACnz.Consolable.Tests.ScenarioTests
                 });
 
             Assert.True(errorWasCalled);
+            Assert.NotNull(values);
+            Assert.Empty(values);
         }
 
         [Theory]
@@ -52,8 +55,8 @@ namespace csMACnz.Consolable.Tests.ScenarioTests
         [InlineData("--bravo")]
         public void IncorrectArgument_ErrorResult(string arg)
         {
-            //Simulate .Net args parsing
-            var args = CLIArgsParser.Parse(arg);
+            // Simulate .Net args parsing
+            var args = ShellArgsParser.Parse(arg);
 
             bool errorWasCalled = false;
             var values = CommandLineParser.Parse(
@@ -69,6 +72,8 @@ namespace csMACnz.Consolable.Tests.ScenarioTests
                 });
 
             Assert.True(errorWasCalled);
+            Assert.NotNull(values);
+            Assert.Empty(values);
         }
     }
 }

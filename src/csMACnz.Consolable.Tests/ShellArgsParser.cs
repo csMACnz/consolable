@@ -1,18 +1,18 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Text;
 
 namespace csMACnz.Consolable.Tests
 {
-    public static class CLIArgsParser
+    public static class ShellArgsParser
     {
         public static string[] Parse(string rawArgs)
         {
-            List<string> result = new List<string>();
+            var result = new List<string>();
 
             var inquote = false;
             var currentIndex = 0;
 
-            for (;;)
+            while (true)
             {
                 if (currentIndex != rawArgs.Length)
                 {
@@ -27,9 +27,9 @@ namespace csMACnz.Consolable.Tests
                     break;
                 }
 
-                StringBuilder currentResult = new StringBuilder();
+                var currentResult = new StringBuilder();
 
-                for (;;)
+                while (true)
                 {
                     var copychar = true;
                     var numslash = 0;
@@ -54,6 +54,7 @@ namespace csMACnz.Consolable.Tests
                                 inquote = !inquote;
                             }
                         }
+
                         numslash /= 2;
                     }
 
@@ -72,10 +73,13 @@ namespace csMACnz.Consolable.Tests
                     {
                         currentResult.Append(rawArgs[currentIndex]);
                     }
+
                     currentIndex++;
                 }
+
                 result.Add(currentResult.ToString());
             }
+
             return result.ToArray();
         }
     }

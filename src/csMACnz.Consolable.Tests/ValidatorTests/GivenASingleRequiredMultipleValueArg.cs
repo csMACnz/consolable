@@ -1,15 +1,16 @@
-using Xunit;
+﻿using Xunit;
 
 namespace csMACnz.Consolable.Tests.ValidatorTests
 {
     public class GivenASingleRequiredMultipleValueArg
     {
-        private IRule[] _rules;
+        private readonly IRule[] _rules;
+
         public GivenASingleRequiredMultipleValueArg()
         {
             _rules = new IRule[] { new RequiredArgument('a', "alpha", ArgumentMode.MultiValue) };
         }
-        
+
         [Fact]
         public void ValidateArguments_ExpectedValueToken_NoErrors()
         {
@@ -24,7 +25,7 @@ namespace csMACnz.Consolable.Tests.ValidatorTests
         public void ValidateArguments_MissingValueToken_OneError()
         {
             var input = new[] { new Token(TokenType.Arg, "a", "-a", 1) };
-            
+
             var result = Validator.ValidateArguments(_rules, input);
 
             Assert.Collection(
@@ -37,9 +38,7 @@ namespace csMACnz.Consolable.Tests.ValidatorTests
                     Assert.Equal(1, e.ErrorToken.RawIndex);
                     Assert.Equal("-a", e.ErrorToken.Raw);
                     Assert.Equal("a", e.Argument);
-                }
-            );
+                });
         }
-
     }
 }

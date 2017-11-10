@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Xunit;
 
 namespace csMACnz.Consolable.Tests
@@ -33,12 +33,12 @@ namespace csMACnz.Consolable.Tests
 
             Assert.Equal(VerifyMode.NotProvided, result);
         }
-        
+
         [Fact]
         public void Verify_MatchingArgument_ExplicitlyProvided()
         {
             var requiredArgument = new RequiredArgument('a', "alpha");
-            var args = new List<Argument>{new Argument{ShortName='a', LongName="alpha", ValueMode = ArgumentMode.Flag}};
+            var args = new List<Argument> { new Argument { ShortName = 'a', LongName = "alpha", ValueMode = ArgumentMode.Flag } };
             var result = requiredArgument.Verify(args);
 
             Assert.Equal(VerifyMode.ExplicitlyProvided, result);

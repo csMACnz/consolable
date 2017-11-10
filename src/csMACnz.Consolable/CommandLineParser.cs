@@ -8,14 +8,20 @@ namespace csMACnz.Consolable
     {
         public static Dictionary<string, object> Parse(IRule[] rules, string[] args, Action<IEnumerable<ParseError>> onError)
         {
-            var tokens = new Tokeniser().GetTokens(args);
+            if (onError == null)
+            {
+                throw new ArgumentNullException(nameof(onError));
+            }
+
+            var tokens = Tokeniser.GetTokens(args);
             var errors = Validator.ValidateArguments(rules, tokens);
             if (errors != null && errors.Any())
             {
                 onError(errors);
                 return new Dictionary<string, object>();
             }
-            return  new ValueParser(rules).Parse(tokens.ToArray());
+
+            return new ValueParser(rules).Parse(tokens.ToArray());
         }
     }
 }

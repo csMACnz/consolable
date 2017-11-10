@@ -1,14 +1,14 @@
-using Xunit;
+﻿using Xunit;
 
 namespace csMACnz.Consolable.Tests
 {
-    public class CLIArgsParserTests
+    public class ShellArgsParserTests
     {
         [Fact]
         public void EmptyString_EmptyArgsArray()
         {
-            var input = "";
-            var result = CLIArgsParser.Parse(input);
+            var input = string.Empty;
+            var result = ShellArgsParser.Parse(input);
             Assert.Empty(result);
         }
 
@@ -21,7 +21,7 @@ namespace csMACnz.Consolable.Tests
         [InlineData(" \t ")]
         public void Whitespace_EmptyArgsArray(string input)
         {
-            var result = CLIArgsParser.Parse(input);
+            var result = ShellArgsParser.Parse(input);
             Assert.Empty(result);
         }
 
@@ -39,7 +39,7 @@ namespace csMACnz.Consolable.Tests
         [InlineData(" \n ", "\n")]
         public void SingleValue_SingleLengthArgsArray(string input, string expected)
         {
-            var result = CLIArgsParser.Parse(input);
+            var result = ShellArgsParser.Parse(input);
             Assert.Collection(
                 result,
                 v =>
@@ -64,7 +64,7 @@ namespace csMACnz.Consolable.Tests
         public void SingleValueWithWhitespace_SingleLengthArgsArray(string input)
         {
             var trimmedValue = input.Trim();
-            var result = CLIArgsParser.Parse(input);
+            var result = ShellArgsParser.Parse(input);
             Assert.Collection(
                 result,
                 v =>
@@ -76,38 +76,38 @@ namespace csMACnz.Consolable.Tests
         [Fact]
         public void ComplexArgs_()
         {
-            var input = " -bdf Foo  -a \"bar baz\" -l \"a\"   fizz buzz \"hello world\"\tfibonacci";
-            var result = CLIArgsParser.Parse(input);
+            const string input = " -bdf Foo  -a \"bar baz\" -l \"a\"   fizz buzz \"hello world\"\tfibonacci";
+            var result = ShellArgsParser.Parse(input);
             Assert.Collection(
                 result,
                 v =>
                 {
                     Assert.Equal("-bdf", v);
-                },v =>
+                }, v =>
                 {
                     Assert.Equal("Foo", v);
-                },v =>
+                }, v =>
                 {
                     Assert.Equal("-a", v);
-                },v =>
+                }, v =>
                 {
                     Assert.Equal("bar baz", v);
-                },v =>
+                }, v =>
                 {
                     Assert.Equal("-l", v);
-                },v =>
+                }, v =>
                 {
                     Assert.Equal("a", v);
-                },v =>
+                }, v =>
                 {
                     Assert.Equal("fizz", v);
-                },v =>
+                }, v =>
                 {
                     Assert.Equal("buzz", v);
-                },v =>
+                }, v =>
                 {
                     Assert.Equal("hello world", v);
-                },v =>
+                }, v =>
                 {
                     Assert.Equal("fibonacci", v);
                 });
